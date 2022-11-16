@@ -2,9 +2,9 @@ package Entidades;
 
 public class Provincia {
     private int codigo;
-    private int nombre;
+    private String nombre;
 
-    public Provincia(){
+    public Provincia(int codigo, String nombre){
         this.codigo = codigo;
         this.nombre = nombre;
     }
