@@ -6,9 +6,9 @@ import java.util.Set;
 
 import org.json.*;
 
-import Entidades.Hospital;
-import Entidades.Localidad;
-import Entidades.Provincia;
+import entidades.Hospital;
+import entidades.Localidad;
+import entidades.Provincia;
 
 public class ExtractorCV {
     JSONArray arrayJson;

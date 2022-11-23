@@ -1,10 +1,12 @@
 package extractores;
 
 import java.util.ArrayList;
-import Entidades.Hospital;
-import Entidades.Localidad;
-import Entidades.Provincia;
+
 import org.json.*;
+
+import entidades.Hospital;
+import entidades.Localidad;
+import entidades.Provincia;
 
 public class ExtractorEUS {
     JSONArray arrayJson;

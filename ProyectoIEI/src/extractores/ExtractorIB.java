@@ -3,9 +3,9 @@ package extractores;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import Entidades.Hospital;
-import Entidades.Localidad;
-import Entidades.Provincia;
+import entidades.Hospital;
+import entidades.Localidad;
+import entidades.Provincia;
 
 public class ExtractorIB {
     private JSONArray json;

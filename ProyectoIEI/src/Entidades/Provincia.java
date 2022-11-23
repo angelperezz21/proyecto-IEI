@@ -1,4 +1,4 @@
-package Entidades;
+package entidades;
 
 public class Provincia {
     private int codigo;
