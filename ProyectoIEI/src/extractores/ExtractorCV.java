@@ -8,7 +8,9 @@ import Entidades.Provincia;
 
 public class ExtractorCV {
     JSONArray arrayJson;
+
     public ExtractorCV(JSONArray arrayJson){
+
         this.arrayJson = arrayJson;
     }
 
