@@ -24,8 +24,9 @@ public class ExtractorIB {
 
         Hospital[] hospitales = new Hospital[nHospitales];
 
-        String nombre = "";
-        String tipo = "";
+        //Atributos
+        String nombre;
+        String tipo;
         String direccion = "";
         int codigoPostal = 0;
         double longitud = 0;
@@ -35,12 +36,34 @@ public class ExtractorIB {
         Localidad localidad = null;
         Provincia provincia = null;
 
+        //Atributos IB
+        String funcio;
+
         JSONObject jsonHospital;
 
         for(int i = 0; i < nHospitales; i++){
             jsonHospital = this.json.getJSONObject(i);
 
+            //Nombre
             nombre = (String)jsonHospital.get("nom");
+
+            //Tipo
+            funcio = (String)jsonHospital.get("funcio");
+            if(funcio.equals("CENTRE SANITARI") || funcio.equals("UNITAT BÀSICA")){
+                tipo = "Centro de salud";
+            }
+            else{
+                //CENTRE SANITARI PREVIST
+                tipo = "Otros";
+            }
+
+            //Direccion
+            direccion = (String)jsonHospital.get("adreca");
+
+            //Codigo postal
+            //Hacer scrapper
+
+            System.out.println(direccion);
 
             hospitales[i] = new Hospital(nombre, tipo, direccion, codigoPostal, longitud, latitud, telefono,descripcion, localidad, provincia);
         }
