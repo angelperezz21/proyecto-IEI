@@ -1,5 +1,9 @@
 package extractores;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.json.*;
 
 import Entidades.Hospital;
@@ -13,6 +17,17 @@ public class ExtractorCV {
     }
 
     public Hospital[] convertir(){
+        
+        String[] tipus_Hospital = {"HOSPITALES DE MEDIA Y LARGA ESTANCIA", 
+        "HOSPITALES DE SALUD MENTAL Y TRATAMIENTO DE TOXICOMANÍAS"
+        ,"HOSPITALES ESPECIALIZADOS",
+        "HOSPITALES GENERALES"};
+        Set<String> tipus_H = new HashSet<>(Arrays.asList(tipus_Hospital));
+
+        String[] tipus_Centro = {"CENTROS DE SALUD",
+            "CENTROS DE SALUD MENTAL"};
+        Set<String> tipus_C = new HashSet<>(Arrays.asList(tipus_Centro));
+
         
         String nombre = "";
         String tipo = "";
@@ -31,12 +46,16 @@ public class ExtractorCV {
             JSONObject x = (JSONObject) arrayJson.get(i);
 
             String tipus = (String)x.get("Tipus_centre");
-            if(tipus == "HOSPITALES DE MEDIA Y LARGA DISTANCIA"
-            || tipus == "HOSPITALES DE SALUD MENTAL Y TRATAMIENTO DE TOXICOMANÍAS"
-            || tipus == "HOSPITALES ESPECIALIZADOS"
-            || tipus == "HOSPITALES GENERALES"){
+            if(tipus_H.contains(tipus)){
                 tipo = "Hospital";
+            }else if(tipus_C.contains(tipus)){
+                tipo = "Centro de salud";
+            }else{
+                tipo = "Otros";
             }
+            
+
+
 
             Hospital hospital = new Hospital(nombre, tipo, direccion, codigoPostal, longitud, latitud, telefono, descripcion, localidad, provincia);
             hospitales[i] = hospital;
