@@ -27,4 +27,5 @@ public class Hospital {
         this.localidad = localidad;
         this.provincia = provincia;
     }
+
 }
