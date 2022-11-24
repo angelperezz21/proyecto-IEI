@@ -6,68 +6,106 @@ import org.json.JSONObject;
 import entidades.Hospital;
 import entidades.Localidad;
 import entidades.Provincia;
+import scrappers.CoordenadasGPS;
 
 public class ExtractorIB {
     private JSONArray json;
 
-    public ExtractorIB(String json){
-        try{
+    public ExtractorIB(String json) {
+        try {
             this.json = new JSONArray(json);
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public Hospital[] convertir(){
+    public Hospital[] convertir() {
         int nHospitales = this.json.length();
 
         Hospital[] hospitales = new Hospital[nHospitales];
 
-        //Atributos
+        // Atributos globales
         String nombre;
         String tipo;
-        String direccion = "";
-        int codigoPostal = 0;
-        double longitud = 0;
-        double latitud = 0;
-        int telefono = 0;
-        String descripcion = "";
-        Localidad localidad = null;
-        Provincia provincia = null;
+        String direccion;
+        int codigoPostal;
+        double longitud;
+        double latitud;
+        int telefono = 0xFFFFFFFF;
+        String descripcion = null;
+        Localidad localidad;
+        Provincia provincia = new Provincia(07, "Islas Baleares");
 
-        //Atributos IB
+        // Notas:
+        // 1) Habra que hacer un gestor de localidades y provincias para que se guarden con id unica
+        // Y asi en la tabla Hospital, estos atributos seran un FK a tablas Localidad y Provincia
+        // y cumplen la tercera forma normal
+        // 2) Gracias a eso podre implementar localidad.codigo
+
+        // Atributos IB
         String funcio;
+        int localidadCodigo;
+        String localidadNombre;
+
+        CoordenadasGPS coordenadasGPS = CoordenadasGPS.getInstance();
 
         JSONObject jsonHospital;
 
-        for(int i = 0; i < nHospitales; i++){
+        for (int i = 0; i < nHospitales; i++) {
             jsonHospital = this.json.getJSONObject(i);
 
-            //Nombre
-            nombre = (String)jsonHospital.get("nom");
+            // Nombre
+            nombre = (String) jsonHospital.get("nom");
 
-            //Tipo
-            funcio = (String)jsonHospital.get("funcio");
-            if(funcio.equals("CENTRE SANITARI") || funcio.equals("UNITAT BÀSICA")){
+            // Tipo
+            funcio = (String) jsonHospital.get("funcio");
+            if (funcio.equals("CENTRE SANITARI") || funcio.equals("UNITAT BÀSICA")) {
                 tipo = "Centro de salud";
-            }
-            else{
-                //CENTRE SANITARI PREVIST
+            } else {
+                // CENTRE SANITARI PREVIST
                 tipo = "Otros";
             }
 
-            //Direccion
-            direccion = (String)jsonHospital.get("adreca");
+            // Direccion
+            direccion = (String) jsonHospital.get("adreca");
 
-            //Codigo postal
-            //Hacer scrapper
+            // Latitud y longitud
+            latitud = (double) jsonHospital.get("lat");
+            longitud = (double) jsonHospital.get("long");
 
-            System.out.println(direccion);
+            // Codigo postal
+            codigoPostal = extraerCPDeDireccion(coordenadasGPS.direccionDeCoordenadas(latitud, longitud));
 
-            hospitales[i] = new Hospital(nombre, tipo, direccion, codigoPostal, longitud, latitud, telefono,descripcion, localidad, provincia);
+            // Telefono (no hay)
+
+            // Descripcion (no hay)
+
+            // Localidad (implementar localidad.codigo)
+            localidadCodigo = -1;
+            localidadNombre = (String) jsonHospital.get("municipi");
+            localidad = new Localidad(localidadCodigo, localidadNombre);
+
+            // Provincia (creada fuera)
+            
+
+            hospitales[i] = new Hospital(nombre, tipo, direccion, codigoPostal, longitud, latitud, telefono, descripcion, localidad, provincia);
         }
 
         return hospitales;
+    }
+
+    private static int extraerCPDeDireccion(String direccion){
+        String[] split = direccion.split(",");
+        String[] cpCiudad = split[split.length - 2].trim().split(" ");
+        System.out.println(direccion);
+
+        int res;
+        try{
+            res = Integer.parseInt(cpCiudad[0]);
+        }
+        catch(NumberFormatException e){
+            res = -1;
+        }
+        return res;
     }
 }
