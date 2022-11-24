@@ -38,7 +38,8 @@ public class CoordenadasGPS {
     }
 
     /**
-     * Devuelve la dirección 
+     * Devuelve la dirección, código postal, ciudad, país
+     * 
      * @param latitud
      * @param longitud
      * @return Dirección de las coordenadas
