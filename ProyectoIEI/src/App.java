@@ -2,8 +2,16 @@ import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import scrappers.CoordenadasGPS;
+
 public class App {
     public static void main(String[] args) throws Exception {
+        // CoordenadasGPS gps = new CoordenadasGPS();
+        // System.out.println(gps.direccionDeCoordenadas(39.36661866, 2.93294588));
+        // System.out.println(gps.direccionDeCoordenadas(39.85494039, 3.12508175));
+        // System.out.println(gps.direccionDeCoordenadas(39.4886571, 2.4810291700000002));
+        // System.exit(0);
+
         System.out.println("BIENVENIDO LIONEL");
 
         Statement sqlSt;

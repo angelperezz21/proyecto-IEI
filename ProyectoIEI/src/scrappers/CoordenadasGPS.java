@@ -11,63 +11,123 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class CoordenadasGPS {
+    WebDriver driver;
+    Actions actions;
+    WebDriverWait waiting;
+
+    public CoordenadasGPS(){
+        // Creamos una instancia de Chrome
+        this.driver = new ChromeDriver();
+
+        // Creamos actions para movernos por la pagina
+        this.actions = new Actions(driver);
+
+        // Creamos un waiting para esperar que ocurran eventos
+        this.waiting = new WebDriverWait(driver, Duration.ofSeconds(30));
+
+        // Vamos a la pagina
+        this.driver.get("https://www.coordenadas-gps.com/");
+
+        // Hacemos scroll al mapa
+        WebElement elementToFind = driver.findElement(By.id("latitude"));
+        actions.moveToElement(elementToFind);
+        actions.perform();
+        
+        // Esperamos a que cargue geocodedAddress
+        waiting.until(ExpectedConditions.presenceOfElementLocated(By.id("geocodedAddress")));
+    }
+
     /**
-     * La wea esta abre el chrome y te devuelve el string con el CP y esas cosas
+     * Devuelve la dirección 
      * @param latitud
      * @param longitud
-     * @return
+     * @return Dirección de las coordenadas
      */
-    public static String direccionDeCoordenadas(double latitud, double longitud){
-        //Creamos una instancia de Chrome
-        WebDriver driver = new ChromeDriver();
-
-        //Creamos actions para movernos por la pagina
-        Actions actions = new Actions(driver);
-
-        //Creamos un waiting para esperar que ocurran eventos
-        WebDriverWait waiting = new WebDriverWait(driver, Duration.ofSeconds(30));
-
-        //Vamos a la pagina
-        driver.get("https://www.coordenadas-gps.com/");
-
-        //Hacemos scroll al mapa
-        WebElement element = driver.findElement(By.id("latitude"));
-        actions.moveToElement(element);
-        actions.perform();
-
-        //Esperamos a que cargue geocodedAddress
-        waiting.until(ExpectedConditions.presenceOfElementLocated(By.id("geocodedAddress")));
-        WebElement geocodedAddressSpan = driver.findElement(By.id("geocodedAddress"));
-
-        //Localizamos los textfield de longitud y latitud
+    public String direccionDeCoordenadas(double latitud, double longitud){
+        // Localizamos los textfield de longitud y latitud
         WebElement latitude_txtf = driver.findElement(By.id("latitude"));
         WebElement longitude_txtf = driver.findElement(By.id("longitude"));
 
-        //Escribimos la longitud y latitud en los textfield
+        // Escribimos la longitud y latitud en los textfield
         latitude_txtf.clear();
         latitude_txtf.sendKeys(String.valueOf(latitud));
 
         longitude_txtf.clear();
         longitude_txtf.sendKeys(String.valueOf(longitud));
 
-        //Localizamos el boton de obtener direccion
+        // Localizamos el boton de obtener direccion
         WebElement getaddress_btn = driver.findElement(By.xpath(".//button[contains(@onclick, 'codeLatLng(1)')]"));
 
-        //Hacemos click en el boton
+        // Hacemos click en el boton
         getaddress_btn.click();
 
-        //Esperamos a que cargue el resultado
+        // Esperamos a que cargue el resultado
+        WebElement geocodedAddressSpan;
         geocodedAddressSpan = driver.findElement(By.id("geocodedAddress"));
         String initialAddress = geocodedAddressSpan.getAttribute("innerHTML");
 
         waiting.until(ExpectedConditions.invisibilityOfElementWithText(By.id("geocodedAddress"), initialAddress));
 
-        //Recuperamos el span con la info
+        // Recuperamos el span con la info
         geocodedAddressSpan = driver.findElement(By.id("geocodedAddress"));
 
-        //Recuperamos su valor
+        // Recuperamos su valor
         String addressText = geocodedAddressSpan.getAttribute("innerHTML");
 
         return addressText;
     }
+
+    // public static String direccionDeCoordenadasStatic(double latitud, double longitud){
+    //     //Creamos una instancia de Chrome
+    //     WebDriver driver = new ChromeDriver();
+
+    //     //Creamos actions para movernos por la pagina
+    //     Actions actions = new Actions(driver);
+
+    //     //Creamos un waiting para esperar que ocurran eventos
+    //     WebDriverWait waiting = new WebDriverWait(driver, Duration.ofSeconds(30));
+
+    //     //Vamos a la pagina
+    //     driver.get("https://www.coordenadas-gps.com/");
+
+    //     //Hacemos scroll al mapa
+    //     WebElement element = driver.findElement(By.id("latitude"));
+    //     actions.moveToElement(element);
+    //     actions.perform();
+
+    //     //Esperamos a que cargue geocodedAddress
+    //     waiting.until(ExpectedConditions.presenceOfElementLocated(By.id("geocodedAddress")));
+    //     WebElement geocodedAddressSpan = driver.findElement(By.id("geocodedAddress"));
+
+    //     //Localizamos los textfield de longitud y latitud
+    //     WebElement latitude_txtf = driver.findElement(By.id("latitude"));
+    //     WebElement longitude_txtf = driver.findElement(By.id("longitude"));
+
+    //     //Escribimos la longitud y latitud en los textfield
+    //     latitude_txtf.clear();
+    //     latitude_txtf.sendKeys(String.valueOf(latitud));
+
+    //     longitude_txtf.clear();
+    //     longitude_txtf.sendKeys(String.valueOf(longitud));
+
+    //     //Localizamos el boton de obtener direccion
+    //     WebElement getaddress_btn = driver.findElement(By.xpath(".//button[contains(@onclick, 'codeLatLng(1)')]"));
+
+    //     //Hacemos click en el boton
+    //     getaddress_btn.click();
+
+    //     //Esperamos a que cargue el resultado
+    //     geocodedAddressSpan = driver.findElement(By.id("geocodedAddress"));
+    //     String initialAddress = geocodedAddressSpan.getAttribute("innerHTML");
+
+    //     waiting.until(ExpectedConditions.invisibilityOfElementWithText(By.id("geocodedAddress"), initialAddress));
+
+    //     //Recuperamos el span con la info
+    //     geocodedAddressSpan = driver.findElement(By.id("geocodedAddress"));
+
+    //     //Recuperamos su valor
+    //     String addressText = geocodedAddressSpan.getAttribute("innerHTML");
+
+    //     return addressText;
+    // }
 }
