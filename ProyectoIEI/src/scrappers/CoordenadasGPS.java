@@ -11,11 +11,21 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class CoordenadasGPS {
+    // Singleton
+    private static CoordenadasGPS instance;
+
+    public static CoordenadasGPS getInstance() {
+        if (instance == null)
+            instance = new CoordenadasGPS();
+        return instance;
+    }
+
+    // Clase
     WebDriver driver;
     Actions actions;
     WebDriverWait waiting;
 
-    public CoordenadasGPS(){
+    private CoordenadasGPS() {
         // Creamos una instancia de Chrome
         this.driver = new ChromeDriver();
 
@@ -32,7 +42,7 @@ public class CoordenadasGPS {
         WebElement elementToFind = driver.findElement(By.id("latitude"));
         actions.moveToElement(elementToFind);
         actions.perform();
-        
+
         // Esperamos a que cargue geocodedAddress
         waiting.until(ExpectedConditions.presenceOfElementLocated(By.id("geocodedAddress")));
     }
@@ -44,7 +54,7 @@ public class CoordenadasGPS {
      * @param longitud
      * @return Dirección de las coordenadas
      */
-    public String direccionDeCoordenadas(double latitud, double longitud){
+    public String direccionDeCoordenadas(double latitud, double longitud) {
         // Localizamos los textfield de longitud y latitud
         WebElement latitude_txtf = driver.findElement(By.id("latitude"));
         WebElement longitude_txtf = driver.findElement(By.id("longitude"));
@@ -78,57 +88,62 @@ public class CoordenadasGPS {
         return addressText;
     }
 
-    // public static String direccionDeCoordenadasStatic(double latitud, double longitud){
-    //     //Creamos una instancia de Chrome
-    //     WebDriver driver = new ChromeDriver();
+    // public static String direccionDeCoordenadasStatic(double latitud, double
+    // longitud){
+    // //Creamos una instancia de Chrome
+    // WebDriver driver = new ChromeDriver();
 
-    //     //Creamos actions para movernos por la pagina
-    //     Actions actions = new Actions(driver);
+    // //Creamos actions para movernos por la pagina
+    // Actions actions = new Actions(driver);
 
-    //     //Creamos un waiting para esperar que ocurran eventos
-    //     WebDriverWait waiting = new WebDriverWait(driver, Duration.ofSeconds(30));
+    // //Creamos un waiting para esperar que ocurran eventos
+    // WebDriverWait waiting = new WebDriverWait(driver, Duration.ofSeconds(30));
 
-    //     //Vamos a la pagina
-    //     driver.get("https://www.coordenadas-gps.com/");
+    // //Vamos a la pagina
+    // driver.get("https://www.coordenadas-gps.com/");
 
-    //     //Hacemos scroll al mapa
-    //     WebElement element = driver.findElement(By.id("latitude"));
-    //     actions.moveToElement(element);
-    //     actions.perform();
+    // //Hacemos scroll al mapa
+    // WebElement element = driver.findElement(By.id("latitude"));
+    // actions.moveToElement(element);
+    // actions.perform();
 
-    //     //Esperamos a que cargue geocodedAddress
-    //     waiting.until(ExpectedConditions.presenceOfElementLocated(By.id("geocodedAddress")));
-    //     WebElement geocodedAddressSpan = driver.findElement(By.id("geocodedAddress"));
+    // //Esperamos a que cargue geocodedAddress
+    // waiting.until(ExpectedConditions.presenceOfElementLocated(By.id("geocodedAddress")));
+    // WebElement geocodedAddressSpan =
+    // driver.findElement(By.id("geocodedAddress"));
 
-    //     //Localizamos los textfield de longitud y latitud
-    //     WebElement latitude_txtf = driver.findElement(By.id("latitude"));
-    //     WebElement longitude_txtf = driver.findElement(By.id("longitude"));
+    // //Localizamos los textfield de longitud y latitud
+    // WebElement latitude_txtf = driver.findElement(By.id("latitude"));
+    // WebElement longitude_txtf = driver.findElement(By.id("longitude"));
 
-    //     //Escribimos la longitud y latitud en los textfield
-    //     latitude_txtf.clear();
-    //     latitude_txtf.sendKeys(String.valueOf(latitud));
+    // //Escribimos la longitud y latitud en los textfield
+    // latitude_txtf.clear();
+    // latitude_txtf.sendKeys(String.valueOf(latitud));
 
-    //     longitude_txtf.clear();
-    //     longitude_txtf.sendKeys(String.valueOf(longitud));
+    // longitude_txtf.clear();
+    // longitude_txtf.sendKeys(String.valueOf(longitud));
 
-    //     //Localizamos el boton de obtener direccion
-    //     WebElement getaddress_btn = driver.findElement(By.xpath(".//button[contains(@onclick, 'codeLatLng(1)')]"));
+    // //Localizamos el boton de obtener direccion
+    // WebElement getaddress_btn =
+    // driver.findElement(By.xpath(".//button[contains(@onclick,
+    // 'codeLatLng(1)')]"));
 
-    //     //Hacemos click en el boton
-    //     getaddress_btn.click();
+    // //Hacemos click en el boton
+    // getaddress_btn.click();
 
-    //     //Esperamos a que cargue el resultado
-    //     geocodedAddressSpan = driver.findElement(By.id("geocodedAddress"));
-    //     String initialAddress = geocodedAddressSpan.getAttribute("innerHTML");
+    // //Esperamos a que cargue el resultado
+    // geocodedAddressSpan = driver.findElement(By.id("geocodedAddress"));
+    // String initialAddress = geocodedAddressSpan.getAttribute("innerHTML");
 
-    //     waiting.until(ExpectedConditions.invisibilityOfElementWithText(By.id("geocodedAddress"), initialAddress));
+    // waiting.until(ExpectedConditions.invisibilityOfElementWithText(By.id("geocodedAddress"),
+    // initialAddress));
 
-    //     //Recuperamos el span con la info
-    //     geocodedAddressSpan = driver.findElement(By.id("geocodedAddress"));
+    // //Recuperamos el span con la info
+    // geocodedAddressSpan = driver.findElement(By.id("geocodedAddress"));
 
-    //     //Recuperamos su valor
-    //     String addressText = geocodedAddressSpan.getAttribute("innerHTML");
+    // //Recuperamos su valor
+    // String addressText = geocodedAddressSpan.getAttribute("innerHTML");
 
-    //     return addressText;
+    // return addressText;
     // }
 }
