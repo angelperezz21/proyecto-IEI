@@ -3,6 +3,7 @@ package scrappers;
 import java.time.Duration;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -24,6 +25,7 @@ public class CoordenadasGPS {
     WebDriver driver;
     Actions actions;
     WebDriverWait waiting;
+    WebDriverWait shortWaiting;
 
     private CoordenadasGPS() {
         // Creamos una instancia de Chrome
@@ -34,6 +36,7 @@ public class CoordenadasGPS {
 
         // Creamos un waiting para esperar que ocurran eventos
         this.waiting = new WebDriverWait(driver, Duration.ofSeconds(30));
+        this.shortWaiting = new WebDriverWait(driver, Duration.ofSeconds(5));
 
         // Vamos a la pagina
         this.driver.get("https://www.coordenadas-gps.com/");
@@ -76,8 +79,13 @@ public class CoordenadasGPS {
         WebElement geocodedAddressSpan;
         geocodedAddressSpan = driver.findElement(By.id("geocodedAddress"));
         String initialAddress = geocodedAddressSpan.getAttribute("innerHTML");
-
-        waiting.until(ExpectedConditions.invisibilityOfElementWithText(By.id("geocodedAddress"), initialAddress));
+        
+        try{
+            shortWaiting.until(ExpectedConditions.invisibilityOfElementWithText(By.id("geocodedAddress"), initialAddress));
+        }
+        catch(TimeoutException e){
+            
+        }
 
         // Recuperamos el span con la info
         geocodedAddressSpan = driver.findElement(By.id("geocodedAddress"));
