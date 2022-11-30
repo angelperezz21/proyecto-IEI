@@ -96,7 +96,7 @@ public class CoordenadasGPS {
         return addressText;
     }
 
-    public String longlatcp(String direccionBuscar) {
+    public String[] longlatcp(String direccionBuscar) {
         // Localizamos los textfield direccion
         WebElement direccion_txtf = driver.findElement(By.id("address"));
 
@@ -123,10 +123,10 @@ public class CoordenadasGPS {
         }
 
         // Recuperamos el span con la info
-        geocodedAddressSpan = driver.findElement(By.id("geocodedAddress"));
+        geocodedAddressSpan = driver.findElement(By.id("address"));
 
         // Recuperamos su valor
-        String addressText = geocodedAddressSpan.getAttribute("innerHTML");
+        String addressText = geocodedAddressSpan.getAttribute("value");
 
         // Recuperamos el span con la latitud
         geocodedAddressSpan = driver.findElement(By.id("latitude"));
@@ -134,7 +134,13 @@ public class CoordenadasGPS {
         // Recuperamos su valor
         String latitud = geocodedAddressSpan.getAttribute("value");
 
-        return latitud;
+        // Recuperamos el span con la longitud
+        geocodedAddressSpan = driver.findElement(By.id("longitude"));
+
+        // Recuperamos su valor
+        String longitud = geocodedAddressSpan.getAttribute("value");
+
+        return new String[] { latitud, longitud, addressText };
     }
 
     // public static String direccionDeCoordenadasStatic(double latitud, double
