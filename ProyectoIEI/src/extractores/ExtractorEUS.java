@@ -11,7 +11,7 @@ import entidades.Provincia;
 public class ExtractorEUS {
     JSONArray arrayJson;
     ArrayList<Hospital> arrayRespuesta = new ArrayList<Hospital>();
-
+    
     private Hospital[] convertir(){
         String nombre = "";
         String tipo = "";
