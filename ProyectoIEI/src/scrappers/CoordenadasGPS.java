@@ -96,6 +96,47 @@ public class CoordenadasGPS {
         return addressText;
     }
 
+    public String longlatcp(String direccionBuscar) {
+        // Localizamos los textfield direccion
+        WebElement direccion_txtf = driver.findElement(By.id("address"));
+
+        // Escribimos la direccion en el textfield
+        direccion_txtf.clear();
+        direccion_txtf.sendKeys(String.valueOf(direccionBuscar));
+
+        // Localizamos el boton de obtener direccion GPS
+        WebElement getaddress_btn = driver.findElement(By.xpath(".//button[contains(@onclick, 'codeAddress()')]"));
+
+        // Hacemos click en el boton
+        getaddress_btn.click();
+
+        // Esperamos a que cargue el resultado
+        WebElement geocodedAddressSpan;
+        geocodedAddressSpan = driver.findElement(By.id("geocodedAddress"));
+        String initialAddress = geocodedAddressSpan.getAttribute("innerHTML");
+        
+        try{
+            shortWaiting.until(ExpectedConditions.invisibilityOfElementWithText(By.id("geocodedAddress"), initialAddress));
+        }
+        catch(TimeoutException e){
+            
+        }
+
+        // Recuperamos el span con la info
+        geocodedAddressSpan = driver.findElement(By.id("geocodedAddress"));
+
+        // Recuperamos su valor
+        String addressText = geocodedAddressSpan.getAttribute("innerHTML");
+
+        // Recuperamos el span con la latitud
+        geocodedAddressSpan = driver.findElement(By.id("latitude"));
+
+        // Recuperamos su valor
+        String latitud = geocodedAddressSpan.getAttribute("value");
+
+        return latitud;
+    }
+
     // public static String direccionDeCoordenadasStatic(double latitud, double
     // longitud){
     // //Creamos una instancia de Chrome
