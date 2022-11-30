@@ -1,15 +1,25 @@
+import java.io.File;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import extractores.ExtractorIB;
 import scrappers.CoordenadasGPS;
+import util.Lector;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        CoordenadasGPS gps = CoordenadasGPS.getInstance();
-        System.out.println(gps.longlatcp("Calle del emparrado, 3 Mislata"));
+        // CoordenadasGPS gps = CoordenadasGPS.getInstance();
+        // System.out.println(gps.longlatcp("Calle del emparrado, 3 Mislata"));
         // System.out.println(gps.direccionDeCoordenadas(39.85494039, 3.12508175));
         // System.out.println(gps.direccionDeCoordenadas(39.4886571, 2.4810291700000002));
+
+        // ExtractorIB extrib = new ExtractorIB(Lector.leerFicheroDeTexto("C:\\Users\\Vicent\\Documents\\UPV\\4o\\IEI\\practicas\\proyecto-IEI\\ProyectoIEI\\src\\fuentedatos\\fuente_ib.json"));
+        ExtractorIB extrib = new ExtractorIB(Lector.leerFicheroDeTexto(
+                new File("").getAbsolutePath() + "\\ProyectoIEI\\src\\fuentedatos\\fuente_ib.json"));
+
+        extrib.convertir();
+
         System.exit(0);
 
         System.out.println("BIENVENIDO LIONEL");

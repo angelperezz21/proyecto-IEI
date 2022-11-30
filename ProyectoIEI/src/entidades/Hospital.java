@@ -28,4 +28,19 @@ public class Hospital {
         this.provincia = provincia;
     }
 
+    @Override
+    public String toString(){
+        return
+            "Nombre: " + this.nombre + "\n" +
+            "Tipo: " + this.tipo + "\n" +
+            "Direccion: " + this.direccion + "\n" +
+            "CP: " + this.codigoPostal + "\n" +
+            "Longitud: " + this.longitud + "\n" +
+            "Latitud: " + this.latitud + "\n" +
+            "Telefono: " + this.telefono + "\n" +
+            "Descripcion: " + this.descripcion + "\n" +
+            "Localidad: (" + this.localidad.getNombre() + ", " + this.localidad.getCodigo() + ")\n" +
+            "Provincia: (" + this.provincia.getNombre() + ", " + this.provincia.getCodigo() +  ")";
+    }
+
 }
