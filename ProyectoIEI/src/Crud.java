@@ -1,4 +1,7 @@
 import java.sql.*;
+import entidades.Hospital;
+
+import entidades.Localidad;
 import entidades.Provincia;
 public class Crud {
 
@@ -18,6 +21,46 @@ public class Crud {
 
         
 	}
+
+    public void createHospital(Hospital hospital ) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement(
+                "insert into Hospital (Nombre,Tipo,Direccion,CodigoPostal,Lonigutd,Latitud,Telefono,Descripcion,Localidad,Provinicia) values (?,?,?,?,?,?,?,?,?,?)'",
+                Statement.RETURN_GENERATED_KEYS);
+    
+       // stmt.setString(1,aCustomer.name);
+       // stmt.setString(2,aCustomer.address);
+       // stmt.setString(3,aCustomer.telephone);
+       // stmt.setString(4,aCustomer.email);
+    
+        stmt.executeUpdate();
+        
+        ResultSet rs = stmt.getGeneratedKeys();
+        
+        if (rs.next()) {
+            //aCustomer.ID = rs.getInt(1);
+        }
+        
+    }
+
+
+    public void createLocalidad(Localidad uLocalidad) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement(
+                "insert into Customers (Codigo, Nombre) values (?,?)'",
+                Statement.RETURN_GENERATED_KEYS);
+    
+        stmt.setString(1,uLocalidad.getCodigo()+"");
+        stmt.setString(2,uLocalidad.getNombre());
+    
+        stmt.executeUpdate();
+        
+        ResultSet rs = stmt.getGeneratedKeys();
+        
+        if (rs.next()) {
+            uLocalidad.setID(rs.getInt(1));
+        }
+        
+    }
+
 
     public void createProvincia(Provincia provincia) throws SQLException {
         PreparedStatement stmt = conn.prepareStatement(
