@@ -11,15 +11,22 @@ import entidades.Localidad;
 import entidades.Provincia;
 
 public class ExtractorCV {
-    JSONArray arrayJson;
+    private JSONArray json;
 
-    public ExtractorCV(JSONArray arrayJson){
-
-        this.arrayJson = arrayJson;
+    public ExtractorCV(String json){
+        try {
+            this.json = new JSONArray(json);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public Hospital[] convertir(){
         
+        int nHospitales = this.json.length();
+
+        Hospital[] hospitales = new Hospital[nHospitales];
+
         String[] tipus_Hospital = {"HOSPITALES DE MEDIA Y LARGA ESTANCIA", 
         "HOSPITALES DE SALUD MENTAL Y TRATAMIENTO DE TOXICOMANÍAS"
         ,"HOSPITALES ESPECIALIZADOS",
@@ -42,12 +49,16 @@ public class ExtractorCV {
         Localidad localidad = null;
         Provincia provincia = null;
 
-        Hospital hospitales[] = new Hospital[arrayJson.length()];
+        JSONObject jsonHospital;
 
-        for(int i = 0; i < arrayJson.length(); i++){
-            JSONObject x = (JSONObject) arrayJson.get(i);
+        for(int i = 0; i < nHospitales; i++){
+            jsonHospital = this.json.getJSONObject(i);
 
-            String tipus = (String)x.get("Tipus_centre");
+            //Nombre
+            nombre = (String) jsonHospital.get("Tipus_centre / Tipo_centro");
+
+            //Tipo
+            String tipus = (String)jsonHospital.get("Centre / Centro");
             if(tipus_H.contains(tipus)){
                 tipo = "Hospital";
             }else if(tipus_C.contains(tipus)){
@@ -55,7 +66,37 @@ public class ExtractorCV {
             }else{
                 tipo = "Otros";
             }
+
+            //Dirección 
+            direccion = (String) jsonHospital.get("Adreça / Dirección");
+
             
+            //Código Postal
+            String direccionBuscar = direccion + ", " +  (String) jsonHospital.get("Municipi / Municipio");
+
+            
+
+            //Longitud
+
+
+            //Latutud
+
+
+            //Telefono
+
+
+            //Descripción
+
+
+            //Localidad
+
+
+            //Provincia
+
+
+
+            
+
 
 
 

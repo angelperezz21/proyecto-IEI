@@ -102,6 +102,7 @@ public class ExtractorIB {
         int res;
         try{
             res = Integer.parseInt(cpCiudad[0]);
+
         }
         catch(NumberFormatException e){
             res = -1;
