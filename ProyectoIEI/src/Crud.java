@@ -39,8 +39,6 @@ public class Crud {
         }
         
     }
-        
-}
 
 
     public void createLocalidad(Localidad uLocalidad) throws SQLException {
