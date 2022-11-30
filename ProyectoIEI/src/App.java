@@ -6,11 +6,11 @@ import scrappers.CoordenadasGPS;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        // CoordenadasGPS gps = new CoordenadasGPS();
-        // System.out.println(gps.direccionDeCoordenadas(39.36661866, 2.93294588));
+        CoordenadasGPS gps = CoordenadasGPS.getInstance();
+        System.out.println(gps.longlatcp("Calle del emparrado, 3 Mislata"));
         // System.out.println(gps.direccionDeCoordenadas(39.85494039, 3.12508175));
         // System.out.println(gps.direccionDeCoordenadas(39.4886571, 2.4810291700000002));
-        // System.exit(0);
+        System.exit(0);
 
         System.out.println("BIENVENIDO LIONEL");
 
