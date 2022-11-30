@@ -1,4 +1,4 @@
-jsonCallback([ {
+[ {
   "Nombre" : "Centro de Salud de Abadiño-Matiena",
   "Codigodelcentro" : "centsal_abadio_matiena",
   "Tipodecentro" : "Centro de Salud",
@@ -7271,4 +7271,4 @@ jsonCallback([ {
   "Telefono" : "946.182.654,0",
   "Fax" : "946182657",
   "Correoelectronico" : "RSMB.HD-ADOLESCENTES@OSAKIDETZA.EUS"
-}, { } ]);
+} ]
