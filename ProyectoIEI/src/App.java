@@ -3,22 +3,25 @@ import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import extractores.ExtractorCV;
+import extractores.ExtractorEUS;
 import extractores.ExtractorIB;
 import scrappers.CoordenadasGPS;
 import util.Lector;
+import util.MunicipioManager;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        // CoordenadasGPS gps = CoordenadasGPS.getInstance();
-        // System.out.println(gps.longlatcp("Calle del emparrado, 3 Mislata"));
-        // System.out.println(gps.direccionDeCoordenadas(39.85494039, 3.12508175));
-        // System.out.println(gps.direccionDeCoordenadas(39.4886571, 2.4810291700000002));
+        String projectPath = new File("").getAbsolutePath();
+        String pathCV = projectPath + "\\ProyectoIEI\\src\\fuentedatos\\fuente_CV.json";
+        String pathEUS = projectPath + "\\ProyectoIEI\\src\\fuentedatos\\fuente_EUS.json";
+        String pathIB = projectPath + "\\ProyectoIEI\\src\\fuentedatos\\fuente_IB.json";
 
-        // ExtractorIB extrib = new ExtractorIB(Lector.leerFicheroDeTexto("C:\\Users\\Vicent\\Documents\\UPV\\4o\\IEI\\practicas\\proyecto-IEI\\ProyectoIEI\\src\\fuentedatos\\fuente_ib.json"));
-        ExtractorIB extrib = new ExtractorIB(Lector.leerFicheroDeTexto(
-                new File("").getAbsolutePath() + "\\ProyectoIEI\\src\\fuentedatos\\fuente_ib.json"));
+        ExtractorCV extractorCV = new ExtractorCV(Lector.leerFicheroDeTexto(pathCV));
+        ExtractorEUS extractorEUS = new ExtractorEUS(Lector.leerFicheroDeTexto(pathEUS));
+        ExtractorIB extractorIB = new ExtractorIB(Lector.leerFicheroDeTexto(pathIB));
 
-        extrib.convertir();
+        //MunicipioManager.getInstance().persistir();
 
         System.exit(0);
 
