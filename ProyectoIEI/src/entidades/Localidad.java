@@ -6,15 +6,7 @@ public class Localidad {
     private String nombre;
 
     public int getID() {
-        return ID;
-    }
-
-    public int getCodigo() {
-        return codigo;
-    }
-
-    public String getNombre() {
-        return nombre;
+        return this.ID;
     }
 
     public void setID(int ID) {
