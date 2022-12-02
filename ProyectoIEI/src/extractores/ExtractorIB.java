@@ -97,15 +97,6 @@ public class ExtractorIB {
             hospitales[i] = new Hospital(nombre, tipo, direccion, codigoPostal, longitud, latitud, telefono, descripcion, localidad, provincia);
         }
 
-        try (PrintWriter pw = new PrintWriter(new File("C:\\Users\\Vicent\\Desktop\\xd.txt"))) {
-            for (int i = 0; i < hospitales.length; i++) {
-                pw.println(hospitales[i].toString() + "\n");
-            }
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
         return hospitales;
     }
 

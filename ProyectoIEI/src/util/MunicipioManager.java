@@ -92,7 +92,7 @@ public class MunicipioManager {
     }
 
     private void loadPersistenceData(){
-        this.persistenceFilePath = new File("").getAbsolutePath() + "\\proyectoIEI\\src\\util\\MunicipioManager.json";
+        this.persistenceFilePath = new File("").getAbsolutePath() + "/proyectoIEI/src/util/MunicipioManager.json";
         try {
             Scanner persistenceFileReader = new Scanner(new File(this.persistenceFilePath), "utf-8");
             String persistenceFileJson = "";

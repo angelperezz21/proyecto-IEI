@@ -12,14 +12,17 @@ import util.MunicipioManager;
 
 public class App {
     public static void main(String[] args) throws Exception {
+        
         String projectPath = new File("").getAbsolutePath();
-        String pathCV = projectPath + "\\ProyectoIEI\\src\\fuentedatos\\fuente_CV.json";
-        String pathEUS = projectPath + "\\ProyectoIEI\\src\\fuentedatos\\fuente_EUS.json";
-        String pathIB = projectPath + "\\ProyectoIEI\\src\\fuentedatos\\fuente_IB.json";
+        String pathCV = projectPath + "/ProyectoIEI/src/fuentedatos/fuente_CV.json";
+        String pathEUS = projectPath + "/ProyectoIEI/src/fuentedatos/fuente_EUS.json";
+        String pathIB = projectPath + "/ProyectoIEI/src/fuentedatos/fuente_IB.json";
 
-        ExtractorCV extractorCV = new ExtractorCV(Lector.leerFicheroDeTexto(pathCV));
-        ExtractorEUS extractorEUS = new ExtractorEUS(Lector.leerFicheroDeTexto(pathEUS));
+        // ExtractorCV extractorCV = new ExtractorCV(Lector.leerFicheroDeTexto(pathCV));
+        // ExtractorEUS extractorEUS = new ExtractorEUS(Lector.leerFicheroDeTexto(pathEUS));
         ExtractorIB extractorIB = new ExtractorIB(Lector.leerFicheroDeTexto(pathIB));
+
+        extractorIB.convertir();
 
         //MunicipioManager.getInstance().persistir();
 
