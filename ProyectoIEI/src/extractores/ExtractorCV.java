@@ -1,5 +1,6 @@
 package extractores;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -10,6 +11,8 @@ import entidades.Hospital;
 import entidades.Localidad;
 import entidades.Provincia;
 import scrappers.CoordenadasGPS;
+import util.LocalidadManager;
+import util.ProvinciaManager;
 
 public class ExtractorCV {
     private JSONArray json;
@@ -23,8 +26,10 @@ public class ExtractorCV {
     }
 
     public Hospital[] convertir(){
-        
         int nHospitales = this.json.length();
+
+        LocalidadManager localidadManager = LocalidadManager.getInstance();
+        ProvinciaManager provinciaManager = ProvinciaManager.getInstance();
 
         CoordenadasGPS coordenadasGPS = CoordenadasGPS.getInstance();
 
@@ -44,11 +49,11 @@ public class ExtractorCV {
         String nombre = "";
         String tipo = "";
         String direccion = "";
-        int codigoPostal = 000;
+        int codigoPostal = -1;
         double longitud = 0;
         double latitud = 0;
-        int telefono = 0;
-        String descripcion = "";
+        int telefono = -1;
+        String descripcion = null;
         Localidad localidad = null;
         Provincia provincia = null;
 
@@ -84,23 +89,40 @@ public class ExtractorCV {
             codigoPostal = extraerCPDeDireccion(array[2]);
 
             //Longitud
-            longitud = Double.parseDouble(array[1]);
+            try{
+                longitud = Double.parseDouble(array[1]);
+            }
+            catch(NullPointerException e){
+                longitud = Double.NaN;
+            }
+            
 
             //Latutud
-            latitud = Double.parseDouble(array[0]);
+            try{
+                latitud = Double.parseDouble(array[0]);
+            }
+            catch(NullPointerException e){
+                latitud = Double.NaN;
+            }
+            
 
             //Telefono(no hay)
 
             //Descripción(no hay)
 
+            // Provincia
+            //provincia = new Provincia((int) jsonHospital.get("Codi_província / Código_provincia"),(String) jsonHospital.get("Província / Provincia"));
+            provincia = provinciaManager.crearProvincia(
+                (int) jsonHospital.get("Codi_província / Código_provincia"),
+                (String) jsonHospital.get("Província / Provincia")
+            );
+
             //Localidad
-            localidad = new Localidad((int) jsonHospital.get("Codi_municipi / Código_municipio"), (String) jsonHospital.get("Municipi / Municipio"));
+            //localidad = new Localidad((int) jsonHospital.get("Codi_municipi / Código_municipio"), (String) jsonHospital.get("Municipi / Municipio"));
+            localidad = localidadManager.crearLocalidad(provincia.getNombre(), ((String) jsonHospital.get("Municipi / Municipio")).replaceAll("'", "''"));
 
-            //Provincia
-            provincia = new Provincia((int) jsonHospital.get("Codi_província / Código_provincia"), (String) jsonHospital.get("Província / Provincia"));
-
-
-            Hospital hospital = new Hospital(nombre, tipo, direccion, codigoPostal, longitud, latitud, telefono, descripcion, localidad, provincia);
+            Hospital hospital = new Hospital(nombre.replaceAll("'","''"), tipo, direccion.replaceAll("'",
+                    "''"), codigoPostal, longitud, latitud, telefono, descripcion, localidad, provincia);
             hospitales[i] = hospital;
         }
 
@@ -110,9 +132,10 @@ public class ExtractorCV {
 
 
     private static int extraerCPDeDireccion(String direccion){
+        if(direccion == null) return -1;
         String[] split = direccion.split(",");
         String[] cpCiudad = split[split.length - 2].trim().split(" ");
-        System.out.println(direccion);
+        //System.out.println(direccion);
 
         int res;
         try{

@@ -13,22 +13,24 @@ import java.util.Scanner;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class MunicipioManager {
-    private static MunicipioManager instance;
+import entidades.Localidad;
 
-    public static MunicipioManager getInstance() {
+public class LocalidadManager {
+    private static LocalidadManager instance;
+
+    public static LocalidadManager getInstance() {
         if (instance == null)
-            instance = new MunicipioManager();
+            instance = new LocalidadManager();
         return instance;
     }
 
-    private HashMap<String, Integer> towns;
+    private HashMap<String, Localidad> towns;
     private int currentId;
     
     private String persistenceFilePath;
 
-    private MunicipioManager() {
-        this.towns = new HashMap<String, Integer>();
+    private LocalidadManager() {
+        this.towns = new HashMap<String, Localidad>();
         this.currentId = 0;
 
         loadPersistenceData();
@@ -37,12 +39,12 @@ public class MunicipioManager {
     /**
      * Devuelve un ID único para cada par (Provincia, Municipio)
      * 
-     * @param provincia
-     * @param municipio
+     * @param nombreProvincia
+     * @param localidad
      * @return ID asignada al municipio
      * @throws Exception
      */
-    public int obtenerIdPara(String provincia, String municipio) {
+    public Localidad crearLocalidad(String nombreProvincia, String nombreLocalidad) {
         // Si nos pasamos de 2^31 - 1 cagamos
         if (this.currentId == Integer.MAX_VALUE) {
             System.err.println("No caben más xd");
@@ -50,22 +52,20 @@ public class MunicipioManager {
         }
 
         // Intentamos buscar la provincia+municipio
-        String key = provincia + municipio;
-        int id = this.towns.getOrDefault(key, -1);
+        String key = nombreProvincia + nombreLocalidad;
+        Localidad localidad = this.towns.getOrDefault(key, null);
 
         // Si ya la tenemos, devolvemos su id
-        if (id != -1)
-            return id;
+        if (localidad != null)
+            return localidad;
 
         // Si no la tenemos, la ponemos y le asignamos una id
-        this.towns.put(key, this.currentId);
-
-        // Auxiliar para poder incrementar currentId
-        id = this.currentId;
+        localidad = new Localidad(currentId, nombreLocalidad);
+        this.towns.put(key, localidad);
 
         this.currentId++;
 
-        return id;
+        return localidad;
     }
 
     public void persistir(){
@@ -74,10 +74,11 @@ public class MunicipioManager {
             JSONArray json = new JSONArray();
             JSONObject jsonObject;
 
-            for (Map.Entry<String, Integer> set : this.towns.entrySet()) {
+            for (Map.Entry<String, Localidad> set : this.towns.entrySet()) {
                 jsonObject = new JSONObject();
                 jsonObject.put("key", set.getKey());
-                jsonObject.put("idValue", set.getValue());
+                jsonObject.put("codigo", set.getValue().getCodigo());
+                jsonObject.put("nombre", set.getValue().getNombre());
                 json.put(jsonObject);
             }
 
@@ -88,6 +89,18 @@ public class MunicipioManager {
         } 
         catch (FileNotFoundException e) {} 
         catch (UnsupportedEncodingException e) {}
+    }
+
+    public Localidad[] obtenerLocalidades(){
+        Localidad[] localidades = new Localidad[this.towns.size()];
+
+        int i = 0;
+        for (Localidad localidad : this.towns.values()) {
+            localidades[i] = localidad;
+            i++;
+        }
+
+        return localidades;
     }
 
     private void loadPersistenceData(){
@@ -107,7 +120,10 @@ public class MunicipioManager {
                 currentObject = json.getJSONObject(i);
                 this.towns.put(
                     (String) currentObject.get("key"),
-                    (int) currentObject.get("idValue")
+                    new Localidad(
+                        (int) currentObject.get("codigo"),
+                        (String) currentObject.get("nombre")
+                    )
                 );
             }
             this.currentId = i;

@@ -7,7 +7,8 @@ import entidades.Hospital;
 import entidades.Localidad;
 import entidades.Provincia;
 import scrappers.CoordenadasGPS;
-import util.MunicipioManager;
+import util.LocalidadManager;
+import util.ProvinciaManager;
 
 public class ExtractorIB {
     private JSONArray json;
@@ -23,6 +24,10 @@ public class ExtractorIB {
     public Hospital[] convertir() {
         int nHospitales = this.json.length();
 
+        CoordenadasGPS coordenadasGPS = CoordenadasGPS.getInstance();
+        LocalidadManager localidadManager = LocalidadManager.getInstance();
+        ProvinciaManager provinciaManager = ProvinciaManager.getInstance();
+
         Hospital[] hospitales = new Hospital[nHospitales];
 
         // Atributos globales
@@ -35,15 +40,12 @@ public class ExtractorIB {
         int telefono = 0xFFFFFFFF;
         String descripcion = null;
         Localidad localidad;
-        Provincia provincia = new Provincia(07, "Islas Baleares");
+        Provincia provincia = provinciaManager.crearProvincia(07, "Islas Baleares");
 
         // Atributos IB
         String funcio;
         int localidadCodigo;
         String localidadNombre;
-
-        CoordenadasGPS coordenadasGPS = CoordenadasGPS.getInstance();
-        MunicipioManager municipioManager = MunicipioManager.getInstance();
 
         JSONObject jsonHospital;
 
@@ -51,7 +53,7 @@ public class ExtractorIB {
             jsonHospital = this.json.getJSONObject(i);
 
             // Nombre
-            nombre = (String) jsonHospital.get("nom");
+            nombre = ((String) jsonHospital.get("nom")).replaceAll("'", "''");
 
             // Tipo
             funcio = (String) jsonHospital.get("funcio");
@@ -63,7 +65,7 @@ public class ExtractorIB {
             }
 
             // Direccion
-            direccion = (String) jsonHospital.get("adreca");
+            direccion = ((String) jsonHospital.get("adreca")).replaceAll("'","''");
 
             // Latitud y longitud
             latitud = (double) jsonHospital.get("lat");
@@ -77,9 +79,8 @@ public class ExtractorIB {
             // Descripcion (no hay)
 
             // Localidad
-            localidadNombre = (String) jsonHospital.get("municipi");
-            localidadCodigo = municipioManager.obtenerIdPara("baleares", localidadNombre);
-            localidad = new Localidad(localidadCodigo, localidadNombre);
+            localidadNombre = ((String) jsonHospital.get("municipi")).replaceAll("'", "''");
+            localidad = localidadManager.crearLocalidad("baleares", localidadNombre);
 
             // Provincia (creada fuera)
             

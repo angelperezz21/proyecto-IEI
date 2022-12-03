@@ -6,7 +6,8 @@ import entidades.Hospital;
 import entidades.Localidad;
 import entidades.Provincia;
 
-import util.MunicipioManager;
+import util.LocalidadManager;
+import util.ProvinciaManager;
 
 public class ExtractorEUS {
     private JSONArray json;
@@ -21,6 +22,10 @@ public class ExtractorEUS {
 
     public Hospital[] convertir() {
         int nHospitales = this.json.length();
+
+        LocalidadManager localidadManager = LocalidadManager.getInstance();
+        ProvinciaManager provinciaManager = ProvinciaManager.getInstance();
+
         Hospital[] hospitales = new Hospital[nHospitales];
 
         // Atributos globales
@@ -45,7 +50,6 @@ public class ExtractorEUS {
         String nombreLocalidad;
         int codProvincia;
         String nombreProvincia;
-        MunicipioManager municipioManager = MunicipioManager.getInstance();
 
         JSONObject jsonHospital;
 
@@ -107,11 +111,10 @@ public class ExtractorEUS {
             // Provincia
             codProvincia = codigoPostal / 1000;
             nombreProvincia = (String) jsonHospital.get("Provincia");
-            provincia = new Provincia(codProvincia, nombreProvincia);
+            provincia = provinciaManager.crearProvincia(codProvincia, nombreProvincia);
             // Localidad
             nombreLocalidad = (String) jsonHospital.get("Municipio");
-            codLocalidad = municipioManager.obtenerIdPara(nombreProvincia, nombreLocalidad);
-            localidad = new Localidad(codLocalidad, nombreLocalidad);
+            localidad = localidadManager.crearLocalidad(nombreProvincia, nombreLocalidad);
 
             hospitales[i] = new Hospital(nombre, tipo, direccion, codigoPostal, longitud, latitud, telefono, descripcion, localidad, provincia);
         }

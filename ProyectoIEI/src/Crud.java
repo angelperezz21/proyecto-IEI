@@ -1,4 +1,6 @@
 import java.sql.*;
+import java.util.Locale;
+
 import entidades.Hospital;
 
 import entidades.Localidad;
@@ -33,65 +35,122 @@ public class Crud {
 
     }
 
-    public void createHospital(Hospital hospital) throws SQLException {
-        PreparedStatement stmt = conn.prepareStatement(
-                "insert into hospital (Nombre,Tipo,Direccion,CodigoPostal,Longitud,Latitud,Telefono,Descripcion,Localidad,Provincia) values (?,?,?,?,?,?,?,?,?,?)",
-                Statement.RETURN_GENERATED_KEYS);
+    public void createHospital(Hospital[] hospitales) throws SQLException {
+        // PreparedStatement stmt = conn.prepareStatement(
+        //         "insert into hospital (Nombre,Tipo,Direccion,CodigoPostal,Longitud,Latitud,Telefono,Descripcion,Localidad,Provincia) values (?,?,?,?,?,?,?,?,?,?)",
+        //         Statement.RETURN_GENERATED_KEYS);
 
-        stmt.setString(1, hospital.getNombre());
-        stmt.setString(2, hospital.getTipo());
-        stmt.setString(3, hospital.getDireccion());
-        stmt.setString(4, hospital.getCodigoPostal() + "");
-        stmt.setString(5, hospital.getLongitud() + "");
-        stmt.setString(6, hospital.getLatitud() + "");
-        stmt.setString(7, hospital.getTelefono() == -1 ? null : hospital.getTelefono() + "");
-        stmt.setString(8, hospital.getDescripcion());
-        stmt.setString(9, hospital.getLocalidad().getCodigo() + "");
-        stmt.setString(10, hospital.getProvincia().getCodigo() + "");
+        // stmt.setString(1, hospital.getNombre());
+        // stmt.setString(2, hospital.getTipo());
+        // stmt.setString(3, hospital.getDireccion());
+        // stmt.setString(4, hospital.getCodigoPostal() + "");
+        // stmt.setString(5, hospital.getLongitud() + "");
+        // stmt.setString(6, hospital.getLatitud() + "");
+        // stmt.setString(7, hospital.getTelefono() == -1 ? null : hospital.getTelefono() + "");
+        // stmt.setString(8, hospital.getDescripcion());
+        // stmt.setString(9, hospital.getLocalidad().getCodigo() + "");
+        // stmt.setString(10, hospital.getProvincia().getCodigo() + "");
 
-        stmt.executeUpdate();
+        // stmt.executeUpdate();
 
-        ResultSet rs = stmt.getGeneratedKeys();
+        // ResultSet rs = stmt.getGeneratedKeys();
 
-        if (rs.next()) {
-            hospital.setID(rs.getInt(1));
+        // if (rs.next()) {
+        //     hospital.setID(rs.getInt(1));
+        // }
+
+        Statement stmt = conn.createStatement();
+
+        Hospital h;
+        String codigoPostalString, latitudString, longitudString, telefonoString;
+        int codigoPostal, telefono;
+        double latitud, longitud;
+        for(int i = 0; i < hospitales.length; i++){
+            h = hospitales[i];
+
+            codigoPostal = h.getCodigoPostal();
+            codigoPostalString = codigoPostal == -1 ? null : Integer.toString(codigoPostal);
+
+            longitud = h.getLongitud();
+            longitudString = Double.isNaN(longitud) ? null : Double.toString(longitud);
+
+            latitud = h.getLatitud();
+            latitudString = Double.isNaN(latitud) ? null : Double.toString(latitud);
+
+            telefono = h.getTelefono();
+            telefonoString = telefono == -1 ? null : Integer.toString(telefono);
+
+            stmt.addBatch(
+                    String.format(
+                        Locale.ROOT,
+                        "insert into hospital (Nombre,Tipo,Direccion,CodigoPostal,Longitud,Latitud,Telefono,Descripcion,Localidad,Provincia) values ('%s','%s','%s','%s','%s','%s','%s','%s','%d','%d')",
+                        h.getNombre(),
+                        h.getTipo(),
+                        h.getDireccion(),
+                        codigoPostalString,
+                        longitudString,
+                        latitudString,
+                        telefonoString,
+                        h.getDescripcion(),
+                        h.getLocalidad().getCodigo(),
+                        h.getProvincia().getCodigo()
+                    )
+            );
         }
 
+        stmt.executeBatch();
     }
 
-    public void createLocalidad(Localidad uLocalidad) throws SQLException {
-        PreparedStatement stmt = conn.prepareStatement(
-                "insert into localidad (Codigo, Nombre) values (?,?)",
-                Statement.RETURN_GENERATED_KEYS);
+    public void createLocalidad(Localidad[] localidades) throws SQLException {
+        // PreparedStatement stmt = conn.prepareStatement(
+        //         "insert into localidad (Codigo, Nombre) values (?,?)",
+        //         Statement.RETURN_GENERATED_KEYS);
 
-        stmt.setString(1, uLocalidad.getCodigo() + "");
-        stmt.setString(2, uLocalidad.getNombre());
+        // stmt.setString(1, uLocalidad.getCodigo() + "");
+        // stmt.setString(2, uLocalidad.getNombre());
 
-        stmt.executeUpdate();
+        // stmt.executeUpdate();
 
-        ResultSet rs = stmt.getGeneratedKeys();
+        // ResultSet rs = stmt.getGeneratedKeys();
 
         // if (rs.next()) {
         // uLocalidad.setID(rs.getInt(1));
         // }
+        Statement stmt = conn.createStatement();
 
+        Localidad l;
+        for(int i = 0; i < localidades.length; i++){
+            l= localidades[i];
+            stmt.addBatch(String.format("insert into localidad (Codigo, Nombre) values ('%d','%s')", l.getCodigo(),l.getNombre()));
+        }
+
+        stmt.executeBatch();
     }
 
-    public void createProvincia(Provincia provincia) throws SQLException {
-        PreparedStatement stmt = conn.prepareStatement(
-                "insert into provincia (Codigo, Nombre) values (?,?)",
-                Statement.RETURN_GENERATED_KEYS);
+    public void createProvincia(Provincia[] provincias) throws SQLException {
+        // PreparedStatement stmt = conn.prepareStatement(
+        //         "insert into provincia (Codigo, Nombre) values (?,?)",
+        //         Statement.RETURN_GENERATED_KEYS);
 
-        stmt.setString(1, Integer.toString(provincia.getCodigo()));
-        stmt.setString(2, provincia.getNombre());
+        // stmt.setString(1, Integer.toString(provincia.getCodigo()));
+        // stmt.setString(2, provincia.getNombre());
 
-        stmt.executeUpdate();
+        // stmt.executeUpdate();
 
-        ResultSet rs = stmt.getGeneratedKeys();
+        // ResultSet rs = stmt.getGeneratedKeys();
 
         // if (rs.next()) {
         // provincia.setID(rs.getInt(1));
         // }
 
+        Statement stmt = conn.createStatement();
+
+        Provincia p;
+        for(int i = 0; i < provincias.length; i++){
+            p = provincias[i];
+            stmt.addBatch(String.format("insert into provincia (Codigo, Nombre) values ('%d','%s')", p.getCodigo(),p.getNombre()));
+        }
+
+        stmt.executeBatch();
     }
 }

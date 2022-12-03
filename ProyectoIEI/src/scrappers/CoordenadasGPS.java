@@ -4,6 +4,7 @@ import java.time.Duration;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -120,6 +121,9 @@ public class CoordenadasGPS {
                     .until(ExpectedConditions.invisibilityOfElementWithText(By.id("geocodedAddress"), initialAddress));
         } catch (TimeoutException e) {
 
+        }
+        catch (UnhandledAlertException e) {
+            return new String[3];
         }
 
         // Recuperamos el span con la info
