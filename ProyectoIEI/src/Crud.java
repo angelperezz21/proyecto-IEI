@@ -11,19 +11,24 @@ public class Crud {
 	public Crud() throws SQLException {
 		try {
             Class.forName("org.mariadb.jdbc.Driver");
+
+            String dbURL = "jdbc:mariadb://IEI-006-v0.dsicv.upv.es:3306";
+
+            conn = DriverManager.getConnection(dbURL, "root", "");
+            sqlSt = conn.createStatement(); // Permite a SQL ser ejecutado
+            sqlSt.executeQuery("use test");
+            
         } catch (ClassNotFoundException e) {
             
             e.printStackTrace();
         }
-        String dbURL = "jdbc:mariadb://IEI-006-v0.dsicv.upv.es:3306";
-        conn = DriverManager.getConnection(dbURL, "root", "");
-        sqlSt = conn.createStatement(); //Permite a SQL ser ejecutado
+        
         
 	}
 
     public void createHospital(Hospital hospital ) throws SQLException {
         PreparedStatement stmt = conn.prepareStatement(
-                "insert into Hospital (Nombre,Tipo,Direccion,CodigoPostal,Lonigutd,Latitud,Telefono,Descripcion,Localidad,Provinicia) values (?,?,?,?,?,?,?,?,?,?)'",
+                "insert into hospital (Nombre,Tipo,Direccion,CodigoPostal,Longitud,Latitud,Telefono,Descripcion,Localidad,Provincia) values (?,?,?,?,?,?,?,?,?,?)",
                 Statement.RETURN_GENERATED_KEYS);
     
         stmt.setString(1,hospital.getNombre());
@@ -32,10 +37,10 @@ public class Crud {
         stmt.setString(4,hospital.getCodigoPostal() + "");
         stmt.setString(5,hospital.getLongitud() + "");
         stmt.setString(6,hospital.getLatitud() + "");
-        stmt.setString(7,hospital.getTelefono() + "");
+        stmt.setString(7,hospital.getTelefono()==-1?null:hospital.getTelefono() + "");
         stmt.setString(8,hospital.getDescripcion());
-        stmt.setString(9,hospital.getLocalidad() + "");
-        stmt.setString(10,hospital.getProvincia() + "");
+        stmt.setString(9,hospital.getLocalidad().getCodigo() + "");
+        stmt.setString(10,hospital.getProvincia().getCodigo() + "");
         
         stmt.executeUpdate();
         
@@ -50,7 +55,7 @@ public class Crud {
 
     public void createLocalidad(Localidad uLocalidad) throws SQLException {
         PreparedStatement stmt = conn.prepareStatement(
-                "insert into Customers (Codigo, Nombre) values (?,?)'",
+                "insert into localidad (Codigo, Nombre) values (?,?)",
                 Statement.RETURN_GENERATED_KEYS);
     
         stmt.setString(1,uLocalidad.getCodigo()+"");
@@ -60,16 +65,16 @@ public class Crud {
         
         ResultSet rs = stmt.getGeneratedKeys();
         
-        if (rs.next()) {
-            uLocalidad.setID(rs.getInt(1));
-        }
+        // if (rs.next()) {
+        //     uLocalidad.setID(rs.getInt(1));
+        // }
         
     }
 
 
     public void createProvincia(Provincia provincia) throws SQLException {
         PreparedStatement stmt = conn.prepareStatement(
-                "insert into Provincia (Codigo, Nombre) values (?,?)'",
+                "insert into provincia (Codigo, Nombre) values (?,?)",
                 Statement.RETURN_GENERATED_KEYS);
     
         stmt.setString(1, Integer.toString(provincia.getCodigo()));
@@ -80,9 +85,9 @@ public class Crud {
         
         ResultSet rs = stmt.getGeneratedKeys();
         
-        if (rs.next()) {
-            provincia.setID(rs.getInt(1));
-        }
+        // if (rs.next()) {
+        //     provincia.setID(rs.getInt(1));
+        // }
         
     }
 }

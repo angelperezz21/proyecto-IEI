@@ -3,6 +3,8 @@ import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import entidades.Hospital;
+import entidades.Localidad;
 import extractores.ExtractorCV;
 import extractores.ExtractorEUS;
 import extractores.ExtractorIB;
@@ -12,6 +14,8 @@ import util.MunicipioManager;
 
 public class App {
     public static void main(String[] args) throws Exception {
+
+        Crud crud = new Crud();
         
         String projectPath = new File("").getAbsolutePath();
         String pathCV = projectPath + "/ProyectoIEI/src/fuentedatos/fuente_CV.json";
@@ -22,45 +26,40 @@ public class App {
         // ExtractorEUS extractorEUS = new ExtractorEUS(Lector.leerFicheroDeTexto(pathEUS));
         ExtractorIB extractorIB = new ExtractorIB(Lector.leerFicheroDeTexto(pathIB));
 
-        extractorIB.convertir();
+        // Hospital[] hospitalesCV = extractorCV.convertir();
+        // Hospital[] hospitalesEUS = extractorEUS.convertir();
+        Hospital[] hospitalesIB = extractorIB.convertir();
 
-        //MunicipioManager.getInstance().persistir();
+        MunicipioManager.getInstance().persistir();
 
-        System.exit(0);
+        // for (int i = 0; i < hospitalesCV.length; i++) {
+        //     try {
+        //         crud.createLocalidad(hospitalesCV[i].getLocalidad());
+        //         crud.createProvincia(hospitalesCV[i].getProvincia());
+        //     } catch (SQLException e) {
+        //     }
 
-        System.out.println("BIENVENIDO LIONEL");
+        //     crud.createHospital(hospitalesCV[i]);
+        // }
 
-        Statement sqlSt;
-        String useSQL = new String("EXTRACCIÓN");
-        String output;
-        ResultSet resultPrueba;
-        ResultSet resultTabla;
-        
-        try{
-            Class.forName("org.mariadb.jdbc.Driver");
-            String dbURL = "jdbc:mariadb://IEI-006-v0.dsicv.upv.es:3306";
-            Connection dbConnect = DriverManager.getConnection(dbURL, "root", "");
-            sqlSt = dbConnect.createStatement(); //Permite a SQL ser ejecutado
-            
-            sqlSt.executeQuery("use test");
-            resultPrueba = sqlSt.executeQuery("select * from prueba");
-            resultTabla = sqlSt.executeQuery("select * from valencia");
-            
-            while(resultPrueba.next()!=false){
-                output = resultPrueba.getString("numero");
-                System.out.println(output);
+        // for (int i = 0; i < hospitalesEUS.length; i++) {
+        //     try {
+        //         crud.createLocalidad(hospitalesEUS[i].getLocalidad());
+        //         crud.createProvincia(hospitalesEUS[i].getProvincia());
+        //     } catch (SQLException e) {
+        //     }
+
+        //     crud.createHospital(hospitalesEUS[i]);
+        // }
+
+        for(int i = 0; i < hospitalesIB.length; i++){
+            try{
+                crud.createLocalidad(hospitalesIB[i].getLocalidad());
+                crud.createProvincia(hospitalesIB[i].getProvincia());
             }
-            while(resultTabla.next()!=false){
-                output = resultTabla.getString("jugador");
-                System.out.println(output);
-            }
-            //System.out.println(result.getString(dbURL));
-
-        }
-        catch(SQLException ex){
-            Logger.getLogger(App.class.getName()).log(Level.SEVERE,null,ex);
-            System.out.println("SQL IS BAD!!" + ex.getMessage());
-
+            catch(SQLException e){} //Si ya existe, seguimos
+            
+            crud.createHospital(hospitalesIB[i]);
         }
     }
 }

@@ -103,7 +103,7 @@ public class ExtractorIB {
     private static int extraerCPDeDireccion(String direccion){
         String[] split = direccion.split(",");
         String[] cpCiudad = split[split.length - 2].trim().split(" ");
-        System.out.println(direccion);
+        //System.out.println(direccion);
 
         int res;
         try{

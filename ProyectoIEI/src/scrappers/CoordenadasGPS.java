@@ -84,7 +84,7 @@ public class CoordenadasGPS {
             shortWaiting
                     .until(ExpectedConditions.invisibilityOfElementWithText(By.id("geocodedAddress"), initialAddress));
         } catch (TimeoutException e) {
-
+            //Si tarda mas de 5 segundos asumimos que ha cargado bien
         }
 
         // Recuperamos el span con la info
@@ -98,11 +98,12 @@ public class CoordenadasGPS {
 
     public String[] longlatcp(String direccionBuscar) {
         // Localizamos los textfield direccion
-        WebElement direccion_txtf = driver.findElement(By.id("address"));
+        WebElement address_txtf;
+        address_txtf = driver.findElement(By.id("address"));
 
         // Escribimos la direccion en el textfield
-        direccion_txtf.clear();
-        direccion_txtf.sendKeys(String.valueOf(direccionBuscar));
+        address_txtf.clear();
+        address_txtf.sendKeys(String.valueOf(direccionBuscar));
 
         // Localizamos el boton de obtener direccion GPS
         WebElement getaddress_btn = driver.findElement(By.xpath(".//button[contains(@onclick, 'codeAddress()')]"));
@@ -111,9 +112,8 @@ public class CoordenadasGPS {
         getaddress_btn.click();
 
         // Esperamos a que cargue el resultado
-        WebElement geocodedAddressSpan;
-        geocodedAddressSpan = driver.findElement(By.id("geocodedAddress"));
-        String initialAddress = geocodedAddressSpan.getAttribute("innerHTML");
+        address_txtf = driver.findElement(By.id("geocodedAddress"));
+        String initialAddress = address_txtf.getAttribute("innerHTML");
 
         try {
             shortWaiting
@@ -123,22 +123,22 @@ public class CoordenadasGPS {
         }
 
         // Recuperamos el span con la info
-        geocodedAddressSpan = driver.findElement(By.id("address"));
+        address_txtf = driver.findElement(By.id("address"));
 
         // Recuperamos su valor
-        String addressText = geocodedAddressSpan.getAttribute("value");
+        String addressText = address_txtf.getAttribute("value");
 
         // Recuperamos el span con la latitud
-        geocodedAddressSpan = driver.findElement(By.id("latitude"));
+        address_txtf = driver.findElement(By.id("latitude"));
 
         // Recuperamos su valor
-        String latitud = geocodedAddressSpan.getAttribute("value");
+        String latitud = address_txtf.getAttribute("value");
 
         // Recuperamos el span con la longitud
-        geocodedAddressSpan = driver.findElement(By.id("longitude"));
+        address_txtf = driver.findElement(By.id("longitude"));
 
         // Recuperamos su valor
-        String longitud = geocodedAddressSpan.getAttribute("value");
+        String longitud = address_txtf.getAttribute("value");
 
         return new String[] { latitud, longitud, addressText };
     }
