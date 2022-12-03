@@ -4,11 +4,17 @@ import entidades.Hospital;
 import entidades.Localidad;
 import entidades.Provincia;
 public class Crud {
+    private static Crud instance;
+
+    public static Crud getInstance() throws SQLException {
+        if(instance == null)instance = new Crud();
+        return instance;
+    }
 
     private Connection conn = null;
 	Statement sqlSt;
 
-	public Crud() throws SQLException {
+	private Crud() throws SQLException {
 		try {
             Class.forName("org.mariadb.jdbc.Driver");
 
