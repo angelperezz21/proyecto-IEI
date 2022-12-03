@@ -1,9 +1,5 @@
 package extractores;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -40,12 +36,6 @@ public class ExtractorIB {
         String descripcion = null;
         Localidad localidad;
         Provincia provincia = new Provincia(07, "Islas Baleares");
-
-        // Notas:
-        // 1) Habra que hacer un gestor de localidades y provincias para que se guarden con id unica
-        // Y asi en la tabla Hospital, estos atributos seran un FK a tablas Localidad y Provincia
-        // y cumplen la tercera forma normal
-        // 2) Gracias a eso podre implementar localidad.codigo
 
         // Atributos IB
         String funcio;
@@ -103,7 +93,6 @@ public class ExtractorIB {
     private static int extraerCPDeDireccion(String direccion){
         String[] split = direccion.split(",");
         String[] cpCiudad = split[split.length - 2].trim().split(" ");
-        //System.out.println(direccion);
 
         int res;
         try{

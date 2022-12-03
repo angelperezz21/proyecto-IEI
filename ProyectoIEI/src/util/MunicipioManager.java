@@ -44,7 +44,6 @@ public class MunicipioManager {
      */
     public int obtenerIdPara(String provincia, String municipio) {
         // Si nos pasamos de 2^31 - 1 cagamos
-        // if(this.currentId == Integer.MAX_VALUE) throw new Exception("No caben más xd");
         if (this.currentId == Integer.MAX_VALUE) {
             System.err.println("No caben más xd");
             System.exit(-1);
@@ -103,13 +102,15 @@ public class MunicipioManager {
 
             int jsonLength = json.length();
             JSONObject currentObject;
-            for(int i = 0; i < jsonLength; i++){
+            int i;
+            for(i = 0; i < jsonLength; i++){
                 currentObject = json.getJSONObject(i);
                 this.towns.put(
                     (String) currentObject.get("key"),
                     (int) currentObject.get("idValue")
                 );
             }
+            this.currentId = i;
 
             persistenceFileReader.close();
         } catch (FileNotFoundException e) {} //Si no la encuentra no pasa nada, se crea de 0

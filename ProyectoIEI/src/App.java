@@ -1,10 +1,8 @@
 import java.io.File;
 import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 import entidades.Hospital;
-import entidades.Localidad;
 import extractores.ExtractorCV;
 import extractores.ExtractorEUS;
 import extractores.ExtractorIB;
@@ -25,14 +23,14 @@ public class App {
         System.out.println();
 
         // ExtractorCV extractorCV = new ExtractorCV(Lector.leerFicheroDeTexto(pathCV));
-        // ExtractorEUS extractorEUS = new ExtractorEUS(Lector.leerFicheroDeTexto(pathEUS));
+        ExtractorEUS extractorEUS = new ExtractorEUS(Lector.leerFicheroDeTexto(pathEUS));
         ExtractorIB extractorIB = new ExtractorIB(Lector.leerFicheroDeTexto(pathIB));
 
         System.out.println("Extrayendo Comunidad Valenciana");
         // Hospital[] hospitalesCV = extractorCV.convertir();
 
         System.out.println("Extrayendo País Vasco");
-        // Hospital[] hospitalesEUS = extractorEUS.convertir();
+        Hospital[] hospitalesEUS = extractorEUS.convertir();
 
         System.out.println("Extrayendo Islas Baleares");
         Hospital[] hospitalesIB = extractorIB.convertir();
@@ -51,15 +49,15 @@ public class App {
         // }
 
         System.out.println("Guardando País Vasco en BD");
-        // for (int i = 0; i < hospitalesEUS.length; i++) {
-        //     try {
-        //         crud.createLocalidad(hospitalesEUS[i].getLocalidad());
-        //         crud.createProvincia(hospitalesEUS[i].getProvincia());
-        //     } catch (SQLException e) {
-        //     }
+        for (int i = 0; i < hospitalesEUS.length; i++) {
+            try {
+                crud.createLocalidad(hospitalesEUS[i].getLocalidad());
+                crud.createProvincia(hospitalesEUS[i].getProvincia());
+            } catch (SQLException e) {
+            }
 
-        //     crud.createHospital(hospitalesEUS[i]);
-        // }
+            crud.createHospital(hospitalesEUS[i]);
+        }
 
         System.out.println("Guardando Islas Baleares en BD");
         for(int i = 0; i < hospitalesIB.length; i++){
