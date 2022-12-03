@@ -76,22 +76,22 @@ public class CoordenadasGPS {
         getaddress_btn.click();
 
         // Esperamos a que cargue el resultado
-        WebElement geocodedAddressSpan;
-        geocodedAddressSpan = driver.findElement(By.id("geocodedAddress"));
-        String initialAddress = geocodedAddressSpan.getAttribute("innerHTML");
-        
-        try{
-            shortWaiting.until(ExpectedConditions.invisibilityOfElementWithText(By.id("geocodedAddress"), initialAddress));
-        }
-        catch(TimeoutException e){
-            
+        WebElement address_txtf;
+        address_txtf = driver.findElement(By.id("address"));
+        String initialAddress = address_txtf.getAttribute("value");
+
+        try {
+            shortWaiting
+                    .until(ExpectedConditions.invisibilityOfElementWithText(By.id("geocodedAddress"), initialAddress));
+        } catch (TimeoutException e) {
+
         }
 
         // Recuperamos el span con la info
-        geocodedAddressSpan = driver.findElement(By.id("geocodedAddress"));
+        address_txtf = driver.findElement(By.id("address"));
 
         // Recuperamos su valor
-        String addressText = geocodedAddressSpan.getAttribute("innerHTML");
+        String addressText = address_txtf.getAttribute("value");
 
         return addressText;
     }
@@ -114,12 +114,12 @@ public class CoordenadasGPS {
         WebElement geocodedAddressSpan;
         geocodedAddressSpan = driver.findElement(By.id("geocodedAddress"));
         String initialAddress = geocodedAddressSpan.getAttribute("innerHTML");
-        
-        try{
-            shortWaiting.until(ExpectedConditions.invisibilityOfElementWithText(By.id("geocodedAddress"), initialAddress));
-        }
-        catch(TimeoutException e){
-            
+
+        try {
+            shortWaiting
+                    .until(ExpectedConditions.invisibilityOfElementWithText(By.id("geocodedAddress"), initialAddress));
+        } catch (TimeoutException e) {
+
         }
 
         // Recuperamos el span con la info
