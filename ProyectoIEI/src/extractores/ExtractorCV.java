@@ -9,6 +9,7 @@ import org.json.*;
 import entidades.Hospital;
 import entidades.Localidad;
 import entidades.Provincia;
+import scrappers.CoordenadasGPS;
 
 public class ExtractorCV {
     private JSONArray json;
@@ -24,6 +25,8 @@ public class ExtractorCV {
     public Hospital[] convertir(){
         
         int nHospitales = this.json.length();
+
+        CoordenadasGPS coordenadasGPS = CoordenadasGPS.getInstance();
 
         Hospital[] hospitales = new Hospital[nHospitales];
 
@@ -51,6 +54,8 @@ public class ExtractorCV {
 
         JSONObject jsonHospital;
 
+        String array[];
+
         for(int i = 0; i < nHospitales; i++){
             jsonHospital = this.json.getJSONObject(i);
 
@@ -74,30 +79,25 @@ public class ExtractorCV {
             //Código Postal
             String direccionBuscar = direccion + ", " +  (String) jsonHospital.get("Municipi / Municipio");
 
-            
+            array = coordenadasGPS.longlatcp(direccionBuscar);
+
+            codigoPostal = extraerCPDeDireccion(array[2]);
 
             //Longitud
-
+            longitud = Double.parseDouble(array[1]);
 
             //Latutud
+            latitud = Double.parseDouble(array[0]);
 
+            //Telefono(no hay)
 
-            //Telefono
-
-
-            //Descripción
-
+            //Descripción(no hay)
 
             //Localidad
-
+            localidad = new Localidad((int) jsonHospital.get("Codi_municipi / Código_municipio"), (String) jsonHospital.get("Municipi / Municipio"));
 
             //Provincia
-
-
-
-            
-
-
+            provincia = new Provincia((int) jsonHospital.get("Codi_província / Código_provincia"), (String) jsonHospital.get("Província / Provincia"));
 
 
             Hospital hospital = new Hospital(nombre, tipo, direccion, codigoPostal, longitud, latitud, telefono, descripcion, localidad, provincia);
@@ -105,6 +105,23 @@ public class ExtractorCV {
         }
 
         return hospitales;
-        
+    
+    }
+
+
+    private static int extraerCPDeDireccion(String direccion){
+        String[] split = direccion.split(",");
+        String[] cpCiudad = split[split.length - 2].trim().split(" ");
+        System.out.println(direccion);
+
+        int res;
+        try{
+            res = Integer.parseInt(cpCiudad[0]);
+
+        }
+        catch(NumberFormatException e){
+            res = -1;
+        }
+        return res;
     }
 }
