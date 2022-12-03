@@ -9,6 +9,8 @@ import entidades.Localidad;
 import entidades.Provincia;
 import scrappers.CoordenadasGPS;
 
+import util.MunicipioManager;
+
 public class ExtractorEUS {
     private JSONArray json;
 
@@ -22,6 +24,7 @@ public class ExtractorEUS {
 
     public Hospital[] convertir(){
         int nHospitales = this.json.length();
+        Hospital[] hospitales = new Hospital[nHospitales];
 
         //Atributos globales
         String nombre = "";
@@ -49,6 +52,7 @@ public class ExtractorEUS {
         String nombreLocalidad;
         int codProvincia;
         String nombreProvincia;
+        MunicipioManager municipioManager = MunicipioManager.getInstance();
 
         JSONObject jsonHospital;
 
@@ -72,6 +76,9 @@ public class ExtractorEUS {
             }
             //Direccion
             direccion = (String) jsonHospital.get("Direccion");
+            // Latitud y longitud
+            latitud = (double) jsonHospital.get("LONWGS84");
+            longitud = (double) jsonHospital.get("LATWGS84");
             //Codigo Postal
             codigoPostal = (int) jsonHospital.get("Codigopostal");
             //Telefono
@@ -80,32 +87,18 @@ public class ExtractorEUS {
             horarioAtencionCiudadana = (String) jsonHospital.get("Horarioatencionciudadana");
             horarioEspecial = (String) jsonHospital.get("Horario especial");
             descripcion = horarioAtencionCiudadana + "\n" + horarioEspecial;
-            //Localidad FALTA LO DEL CÓDIGO DE LOCALIDAD
-            codLocalidad = 0;
+            //Localidad
             nombreLocalidad = (String) jsonHospital.get("Municipio");
+            codLocalidad = municipioManager.obtenerIdPara("euskadi", nombreLocalidad);
             localidad = new Localidad(codLocalidad, nombreLocalidad);
             //Provincia
             codProvincia = ((int) jsonHospital.get("Codigopostal"))/1000;
             nombreProvincia = (String) jsonHospital.get("Provincia");
             provincia = new Provincia(codProvincia, nombreProvincia);
+
+            hospitales[i] = new Hospital(nombre, tipo, direccion, codigoPostal, longitud, latitud, telefono, descripcion, localidad, provincia);
         }
-
-
-
-
-
-
-
-        // Hospital hospitales[] = new Hospital[arrayJson.length()];
-
-        // for(int i = 0; i < hospitales.length; i++){
-        //     JSONObject x = (JSONObject) arrayJson.get(i);
-
-        //     String tipus = (String)x.get("Tipodecentro");
-        //     if(tipus == "Hospital"){tipo = "Hospital";}
-        // }
-        return null;
+        
+        return hospitales;
     }
-
-
 }
