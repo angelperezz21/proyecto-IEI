@@ -2,7 +2,7 @@ package entidades;
 
 
 public class Hospital {
-
+    private int ID;
     private String nombre;
     private String tipo;
     private String direccion;
@@ -13,6 +13,15 @@ public class Hospital {
     private String descripcion;
     private Localidad localidad;
     private Provincia provincia;
+
+    
+    public int getID() {
+        return this.ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
+    }
 
     public Hospital(String nombre, String tipo, String direccion, int codigoPostal, double longitud, double latitud, int telefono,
                     String descripcion, Localidad localidad, Provincia provincia){
@@ -26,6 +35,90 @@ public class Hospital {
         this.descripcion = descripcion;
         this.localidad = localidad;
         this.provincia = provincia;
+    }
+     
+    //GETTERS 
+
+    public String getNombre() {
+        return this.nombre;
+    }
+
+    public String getTipo() {
+        return this.tipo;
+    }
+   
+    public String getDireccion() {
+        return this.direccion;
+    }
+    
+    public int getCodigoPostal() {
+        return this.codigoPostal;
+    }
+    
+    public double getLongitud() {
+        return this.longitud;
+    }
+
+    public double getLatitud() {
+        return this.latitud;
+    }
+
+    public int getTelefono() {
+        return this.telefono;
+    }
+    
+    public String getDescripcion() {
+        return this.descripcion;
+    }
+
+    public Localidad getLocalidad() {
+        return this.localidad;
+    }
+
+    public Provincia getProvincia() {
+        return this.provincia;
+    }
+
+    //SETTERS
+    
+    public void setNombre(String nombre) {
+         this.nombre = nombre;
+    }
+
+    public void setTipo(String tipo) {
+         this.tipo = tipo;
+    }
+   
+    public void setDireccion(String direccion) {
+         this.direccion = direccion;
+    }
+    
+    public void setCodigoPostal(int codigoPostal) {
+         this.codigoPostal = codigoPostal;
+    }
+    
+    public void setLongitud(double longitud) {
+         this.longitud = longitud;
+    }
+
+    public void setLatitud(double latitud) {
+         this.latitud = latitud;
+    }
+
+    public void setTelefono(int telefono) {
+         this.telefono = telefono;
+    }
+    
+    public void setDescripcion(String descripcion) {
+         this.descripcion = descripcion;
+    }
+
+    public void setLocalidad(Localidad localidad) {
+         this.localidad = localidad;
+    }
+
+    public void setProvincia(Provincia provincia) {
+         this.provincia = provincia;
     }
 
     @Override
