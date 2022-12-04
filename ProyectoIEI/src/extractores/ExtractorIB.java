@@ -44,7 +44,7 @@ public class ExtractorIB {
 
         // Atributos IB
         String funcio;
-        int localidadCodigo;
+        //int localidadCodigo;
         String localidadNombre;
 
         JSONObject jsonHospital;

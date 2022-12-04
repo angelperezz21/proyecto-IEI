@@ -62,28 +62,31 @@ public class Crud {
         Statement stmt = conn.createStatement();
 
         Hospital h;
-        String codigoPostalString, latitudString, longitudString, telefonoString;
+        String codigoPostalString, latitudString, longitudString, telefonoString, descripcionString;
         int codigoPostal, telefono;
         double latitud, longitud;
         for(int i = 0; i < hospitales.length; i++){
             h = hospitales[i];
 
             codigoPostal = h.getCodigoPostal();
-            codigoPostalString = codigoPostal == -1 ? null : Integer.toString(codigoPostal);
+            codigoPostalString = codigoPostal == -1 ? null : "'"+Integer.toString(codigoPostal)+"'";
 
             longitud = h.getLongitud();
-            longitudString = Double.isNaN(longitud) ? null : Double.toString(longitud);
+            longitudString = Double.isNaN(longitud) ? null : "'"+Double.toString(longitud)+"'";
 
             latitud = h.getLatitud();
-            latitudString = Double.isNaN(latitud) ? null : Double.toString(latitud);
+            latitudString = Double.isNaN(latitud) ? null : "'"+Double.toString(latitud)+"'";
 
             telefono = h.getTelefono();
-            telefonoString = telefono == -1 ? null : Integer.toString(telefono);
+            telefonoString = telefono == -1 ? null : "'"+Integer.toString(telefono)+"'";
+
+            descripcionString = h.getDescripcion();
+            descripcionString = descripcionString == null ? null : "'"+descripcionString+"'";
 
             stmt.addBatch(
                     String.format(
                         Locale.ROOT,
-                        "insert into hospital (Nombre,Tipo,Direccion,CodigoPostal,Longitud,Latitud,Telefono,Descripcion,Localidad,Provincia) values ('%s','%s','%s','%s','%s','%s','%s','%s','%d','%d')",
+                        "insert into hospital (Nombre,Tipo,Direccion,CodigoPostal,Longitud,Latitud,Telefono,Descripcion,Localidad,Provincia) values ('%s','%s','%s',%s,%s,%s,%s,%s,'%d','%d')",
                         h.getNombre(),
                         h.getTipo(),
                         h.getDireccion(),
@@ -91,7 +94,7 @@ public class Crud {
                         longitudString,
                         latitudString,
                         telefonoString,
-                        h.getDescripcion(),
+                        descripcionString,
                         h.getLocalidad().getCodigo(),
                         h.getProvincia().getCodigo()
                     )

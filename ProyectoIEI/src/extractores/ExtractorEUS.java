@@ -46,7 +46,7 @@ public class ExtractorEUS {
         String telefonos;
         String horarioAtencionCiudadana;
         String horarioEspecial;
-        int codLocalidad;
+        //int codLocalidad;
         String nombreLocalidad;
         int codProvincia;
         String nombreProvincia;
