@@ -64,10 +64,10 @@ public class ExtractorCV {
             jsonHospital = this.json.getJSONObject(i);
 
             //Nombre
-            nombre = (String) jsonHospital.get("Tipus_centre / Tipo_centro");
+            nombre = (String) jsonHospital.get("Centre / Centro");
 
             //Tipo
-            String tipus = (String)jsonHospital.get("Centre / Centro");
+            String tipus = (String)jsonHospital.get("Tipus_centre / Tipo_centro");
             if(tipus_H.contains(tipus)){
                 tipo = "Hospital";
             }else if(tipus_C.contains(tipus)){
