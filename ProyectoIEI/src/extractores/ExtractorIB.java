@@ -3,10 +3,11 @@ package extractores;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import entidades.Hospital;
+import entidades.CentroSanitario;
 import entidades.Localidad;
 import entidades.Provincia;
 import scrappers.CoordenadasGPS;
+import util.CentroSanitarioManager;
 import util.LocalidadManager;
 import util.ProvinciaManager;
 
@@ -21,14 +22,16 @@ public class ExtractorIB {
         }
     }
 
-    public Hospital[] convertir() {
+    public CentroSanitario[] convertir() {
         int nHospitales = this.json.length();
 
         CoordenadasGPS coordenadasGPS = CoordenadasGPS.getInstance();
+        CentroSanitarioManager centroSanitarioManager = CentroSanitarioManager.getInstance();
         LocalidadManager localidadManager = LocalidadManager.getInstance();
         ProvinciaManager provinciaManager = ProvinciaManager.getInstance();
 
-        Hospital[] hospitales = new Hospital[nHospitales];
+        // CentroSanitario[] hospitales = new CentroSanitario[nHospitales];
+        CentroSanitario[] hospitales = new CentroSanitario[0];
 
         // Atributos globales
         String nombre;
@@ -80,12 +83,12 @@ public class ExtractorIB {
 
             // Localidad
             localidadNombre = ((String) jsonHospital.get("municipi")).replaceAll("'", "''");
-            localidad = localidadManager.crearLocalidad("baleares", localidadNombre);
+            localidad = localidadManager.crearLocalidad(localidadNombre, provincia);
 
             // Provincia (creada fuera)
             
-
-            hospitales[i] = new Hospital(nombre, tipo, direccion, codigoPostal, longitud, latitud, telefono, descripcion, localidad, provincia);
+            centroSanitarioManager.crearHospital(nombre, tipo, direccion, codigoPostal, longitud, latitud, telefono, descripcion, localidad);
+            //hospitales[i] = new CentroSanitario(nombre, tipo, direccion, codigoPostal, longitud, latitud, telefono, descripcion, localidad, provincia);
         }
 
         return hospitales;

@@ -14,6 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import entidades.Localidad;
+import entidades.Provincia;
 
 public class LocalidadManager {
     private static LocalidadManager instance;
@@ -33,7 +34,7 @@ public class LocalidadManager {
         this.towns = new HashMap<String, Localidad>();
         this.currentId = 0;
 
-        loadPersistenceData();
+        //loadPersistenceData();
     }
 
     /**
@@ -44,15 +45,14 @@ public class LocalidadManager {
      * @return ID asignada al municipio
      * @throws Exception
      */
-    public Localidad crearLocalidad(String nombreProvincia, String nombreLocalidad) {
-        // Si nos pasamos de 2^31 - 1 cagamos
+    public Localidad crearLocalidad(String nombreLocalidad, Provincia provincia) {
         if (this.currentId == Integer.MAX_VALUE) {
-            System.err.println("No caben más xd");
+            System.err.println("Error: No se puede guardar más localidades");
             System.exit(-1);
         }
 
         // Intentamos buscar la provincia+municipio
-        String key = nombreProvincia + nombreLocalidad;
+        String key = provincia.getNombre() + nombreLocalidad;
         Localidad localidad = this.towns.getOrDefault(key, null);
 
         // Si ya la tenemos, devolvemos su id
@@ -60,7 +60,7 @@ public class LocalidadManager {
             return localidad;
 
         // Si no la tenemos, la ponemos y le asignamos una id
-        localidad = new Localidad(currentId, nombreLocalidad);
+        localidad = new Localidad(currentId, nombreLocalidad, provincia);
         this.towns.put(key, localidad);
 
         this.currentId++;
@@ -103,33 +103,33 @@ public class LocalidadManager {
         return localidades;
     }
 
-    private void loadPersistenceData(){
-        this.persistenceFilePath = new File("").getAbsolutePath() + "/proyectoIEI/src/util/MunicipioManager.json";
-        try {
-            Scanner persistenceFileReader = new Scanner(new File(this.persistenceFilePath), "utf-8");
-            String persistenceFileJson = "";
-            while (persistenceFileReader.hasNext()) {
-                persistenceFileJson += persistenceFileReader.nextLine();
-            }
-            JSONArray json = new JSONArray(persistenceFileJson);
+    // private void loadPersistenceData(){
+    //     this.persistenceFilePath = new File("").getAbsolutePath() + "/proyectoIEI/src/util/MunicipioManager.json";
+    //     try {
+    //         Scanner persistenceFileReader = new Scanner(new File(this.persistenceFilePath), "utf-8");
+    //         String persistenceFileJson = "";
+    //         while (persistenceFileReader.hasNext()) {
+    //             persistenceFileJson += persistenceFileReader.nextLine();
+    //         }
+    //         JSONArray json = new JSONArray(persistenceFileJson);
 
-            int jsonLength = json.length();
-            JSONObject currentObject;
-            int i;
-            for(i = 0; i < jsonLength; i++){
-                currentObject = json.getJSONObject(i);
-                this.towns.put(
-                    (String) currentObject.get("key"),
-                    new Localidad(
-                        (int) currentObject.get("codigo"),
-                        (String) currentObject.get("nombre")
-                    )
-                );
-            }
-            this.currentId = i;
+    //         int jsonLength = json.length();
+    //         JSONObject currentObject;
+    //         int i;
+    //         for(i = 0; i < jsonLength; i++){
+    //             currentObject = json.getJSONObject(i);
+    //             this.towns.put(
+    //                 (String) currentObject.get("key"),
+    //                 new Localidad(
+    //                     (int) currentObject.get("codigo"),
+    //                     (String) currentObject.get("nombre")
+    //                 )
+    //             );
+    //         }
+    //         this.currentId = i;
 
-            persistenceFileReader.close();
-        } catch (FileNotFoundException e) {} //Si no la encuentra no pasa nada, se crea de 0
-    }
+    //         persistenceFileReader.close();
+    //     } catch (FileNotFoundException e) {} //Si no la encuentra no pasa nada, se crea de 0
+    // }
 
 }

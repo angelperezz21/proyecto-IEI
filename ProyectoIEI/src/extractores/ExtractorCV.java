@@ -6,10 +6,13 @@ import java.util.Set;
 
 import org.json.*;
 
-import entidades.Hospital;
+import com.google.common.net.HostAndPort;
+
+import entidades.CentroSanitario;
 import entidades.Localidad;
 import entidades.Provincia;
 import scrappers.CoordenadasGPS;
+import util.CentroSanitarioManager;
 import util.LocalidadManager;
 import util.ProvinciaManager;
 
@@ -24,15 +27,17 @@ public class ExtractorCV {
         }
     }
 
-    public Hospital[] convertir(){
+    public CentroSanitario[] convertir(){
         int nHospitales = this.json.length();
 
+        CentroSanitarioManager centroSanitarioManager = CentroSanitarioManager.getInstance();
         LocalidadManager localidadManager = LocalidadManager.getInstance();
         ProvinciaManager provinciaManager = ProvinciaManager.getInstance();
 
         CoordenadasGPS coordenadasGPS = CoordenadasGPS.getInstance();
 
-        Hospital[] hospitales = new Hospital[nHospitales];
+        //CentroSanitario[] hospitales = new CentroSanitario[nHospitales];
+        CentroSanitario[] hospitales = new CentroSanitario[0];
 
         String[] tipus_Hospital = {"HOSPITALES DE MEDIA Y LARGA ESTANCIA", 
         "HOSPITALES DE SALUD MENTAL Y TRATAMIENTO DE TOXICOMANÍAS"
@@ -118,11 +123,13 @@ public class ExtractorCV {
 
             //Localidad
             //localidad = new Localidad((int) jsonHospital.get("Codi_municipi / Código_municipio"), (String) jsonHospital.get("Municipi / Municipio"));
-            localidad = localidadManager.crearLocalidad(provincia.getNombre(), ((String) jsonHospital.get("Municipi / Municipio")).replaceAll("'", "''"));
+            localidad = localidadManager.crearLocalidad(((String) jsonHospital.get("Municipi / Municipio")).replaceAll("'", "''"), provincia);
 
-            Hospital hospital = new Hospital(nombre.replaceAll("'","''"), tipo, direccion.replaceAll("'",
-                    "''"), codigoPostal, longitud, latitud, telefono, descripcion, localidad, provincia);
-            hospitales[i] = hospital;
+            centroSanitarioManager.crearHospital(nombre, tipo, direccion, codigoPostal, longitud, latitud, telefono, descripcion, localidad);
+
+            // CentroSanitario hospital = new CentroSanitario(nombre.replaceAll("'","''"), tipo, direccion.replaceAll("'",
+            //         "''"), codigoPostal, longitud, latitud, telefono, descripcion, localidad, provincia);
+            // hospitales[i] = hospital;
         }
 
         return hospitales;

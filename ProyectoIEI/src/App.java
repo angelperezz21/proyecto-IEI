@@ -1,13 +1,14 @@
 import java.io.File;
 
 
-import entidades.Hospital;
+import entidades.CentroSanitario;
 import entidades.Localidad;
 import entidades.Provincia;
 import extractores.ExtractorCV;
 import extractores.ExtractorEUS;
 import extractores.ExtractorIB;
 import scrappers.CoordenadasGPS;
+import util.CentroSanitarioManager;
 import util.Lector;
 import util.LocalidadManager;
 import util.ProvinciaManager;
@@ -15,6 +16,7 @@ import util.ProvinciaManager;
 public class App {
     public static void main(String[] args) throws Exception {
         Crud crud = Crud.getInstance();
+        CentroSanitarioManager centroSanitarioManager = CentroSanitarioManager.getInstance();
         LocalidadManager localidadManager = LocalidadManager.getInstance();
         ProvinciaManager provinciaManager = ProvinciaManager.getInstance();
         
@@ -32,33 +34,29 @@ public class App {
 
         //Extrae los datos de las fuentes
         System.out.println("Extrayendo Comunidad Valenciana");
-        Hospital[] hospitalesCV = extractorCV.convertir();
+        CentroSanitario[] hospitalesCV = extractorCV.convertir();
 
         System.out.println("Extrayendo País Vasco");
-        Hospital[] hospitalesEUS = extractorEUS.convertir();
+        CentroSanitario[] hospitalesEUS = extractorEUS.convertir();
 
         System.out.println("Extrayendo Islas Baleares");
-        Hospital[] hospitalesIB = extractorIB.convertir();
+        CentroSanitario[] hospitalesIB = extractorIB.convertir();
 
 
-        localidadManager.persistir();
+        //localidadManager.persistir();
 
-
+        CentroSanitario[] centrosSanitarios = centroSanitarioManager.obtenerCentrosSanitarios();
         Localidad[] localidades = localidadManager.obtenerLocalidades();
         Provincia[] provincias = provinciaManager.obtenerProvincias();
 
-        //Guarda localidades y provincias en la BD
-        crud.createLocalidad(localidades);
+        //Guarda todo en la BD
+        System.out.println("Guardando provincias en BD");
         crud.createProvincia(provincias);
 
-        //Guarda los hospitales en la BD
-        System.out.println("Guardando Comunidad Valenciana en BD");
-        crud.createHospital(hospitalesCV);
+        System.out.println("Guardando localidades en BD");
+        crud.createLocalidad(localidades);
 
-        System.out.println("Guardando País Vasco en BD");
-        crud.createHospital(hospitalesEUS);
-
-        System.out.println("Guardando Islas Baleares en BD");
-        crud.createHospital(hospitalesIB);
+        System.out.println("Guardando centros sanitarios en BD");
+        crud.createHospital(centrosSanitarios);
     }
 }

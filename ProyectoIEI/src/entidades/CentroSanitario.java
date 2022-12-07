@@ -1,7 +1,7 @@
 package entidades;
 
 
-public class Hospital {
+public class CentroSanitario {
     private int ID;
     private String nombre;
     private String tipo;
@@ -23,8 +23,9 @@ public class Hospital {
         this.ID = ID;
     }
 
-    public Hospital(String nombre, String tipo, String direccion, int codigoPostal, double longitud, double latitud, int telefono,
+    public CentroSanitario(int id, String nombre, String tipo, String direccion, int codigoPostal, double longitud, double latitud, int telefono,
                     String descripcion, Localidad localidad, Provincia provincia){
+        this.ID = id;
         this.nombre = nombre;
         this.tipo = tipo;
         this.direccion = direccion;

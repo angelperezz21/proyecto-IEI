@@ -1,16 +1,14 @@
 package entidades;
 
 public class Localidad {
-    private int ID;
     private int codigo;
     private String nombre;
+    private Provincia provincia;
 
-    public int getID() {
-        return this.ID;
-    }
-
-    public void setID(int ID) {
-        this.ID = ID;
+    public Localidad(int codigo, String nombre, Provincia provincia) {
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.provincia = provincia;
     }
 
     public void setCodigo(int codigo) {
@@ -21,9 +19,8 @@ public class Localidad {
         this.nombre = nombre;
     }
 
-    public Localidad(int codigo, String nombre){
-        this.codigo = codigo;
-        this.nombre = nombre;
+    public void setProvincia(Provincia provincia){
+        this.provincia = provincia;
     }
 
     public int getCodigo() {
@@ -32,5 +29,9 @@ public class Localidad {
 
     public String getNombre() {
         return this.nombre;
+    }
+
+    public Provincia getProvincia(){
+        return this.provincia;
     }
 }

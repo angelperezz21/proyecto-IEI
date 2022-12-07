@@ -1,7 +1,7 @@
 import java.sql.*;
 import java.util.Locale;
 
-import entidades.Hospital;
+import entidades.CentroSanitario;
 
 import entidades.Localidad;
 import entidades.Provincia;
@@ -35,7 +35,7 @@ public class Crud {
 
     }
 
-    public void createHospital(Hospital[] hospitales) throws SQLException {
+    public void createHospital(CentroSanitario[] hospitales) throws SQLException {
         // PreparedStatement stmt = conn.prepareStatement(
         //         "insert into hospital (Nombre,Tipo,Direccion,CodigoPostal,Longitud,Latitud,Telefono,Descripcion,Localidad,Provincia) values (?,?,?,?,?,?,?,?,?,?)",
         //         Statement.RETURN_GENERATED_KEYS);
@@ -61,7 +61,7 @@ public class Crud {
 
         Statement stmt = conn.createStatement();
 
-        Hospital h;
+        CentroSanitario h;
         String codigoPostalString, latitudString, longitudString, telefonoString, descripcionString;
         int codigoPostal, telefono;
         double latitud, longitud;
@@ -86,7 +86,8 @@ public class Crud {
             stmt.addBatch(
                     String.format(
                         Locale.ROOT,
-                        "insert into hospital (Nombre,Tipo,Direccion,CodigoPostal,Longitud,Latitud,Telefono,Descripcion,Localidad,Provincia) values ('%s','%s','%s',%s,%s,%s,%s,%s,'%d','%d')",
+                        "insert into centro_sanitario (ID, Nombre,Tipo,Direccion,CodigoPostal,Longitud,Latitud,Telefono,Descripcion,Localidad) values ('%d','%s','%s','%s',%s,%s,%s,%s,%s,'%d')",
+                        h.getID(),
                         h.getNombre(),
                         h.getTipo(),
                         h.getDireccion(),
@@ -95,8 +96,7 @@ public class Crud {
                         latitudString,
                         telefonoString,
                         descripcionString,
-                        h.getLocalidad().getCodigo(),
-                        h.getProvincia().getCodigo()
+                        h.getLocalidad().getCodigo()
                     )
             );
         }
@@ -124,7 +124,7 @@ public class Crud {
         Localidad l;
         for(int i = 0; i < localidades.length; i++){
             l= localidades[i];
-            stmt.addBatch(String.format("insert into localidad (Codigo, Nombre) values ('%d','%s')", l.getCodigo(),l.getNombre()));
+            stmt.addBatch(String.format("insert into localidad (Codigo, Nombre, Cod_provincia) values ('%d','%s','%d')", l.getCodigo(),l.getNombre(),l.getProvincia().getCodigo()));
         }
 
         stmt.executeBatch();
