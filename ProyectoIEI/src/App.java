@@ -20,7 +20,7 @@ public class App {
         
         String projectPath = new File("").getAbsolutePath();
         String pathCV = projectPath + "/ProyectoIEI/src/fuentedatos/fuente_CV_small.json";
-        String pathEUS = projectPath + "/ProyectoIEI/src/fuentedatos/fuente_EUS.json";
+        String pathEUS = projectPath + "/ProyectoIEI/src/fuentedatos/fuente_EUS_small.json";
         String pathIB = projectPath + "/ProyectoIEI/src/fuentedatos/fuente_IB_small.json";
 
         CoordenadasGPS.getInstance();
