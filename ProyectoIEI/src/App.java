@@ -7,6 +7,7 @@ import entidades.Provincia;
 import extractores.ExtractorCV;
 import extractores.ExtractorEUS;
 import extractores.ExtractorIB;
+import extractores.Wrapper_CV;
 import scrappers.CoordenadasGPS;
 import util.CentroSanitarioManager;
 import util.Lector;
@@ -24,14 +25,17 @@ public class App {
         String pathCV = projectPath + "/ProyectoIEI/src/fuentedatos/fuente_CV_small.json";
         String pathEUS = projectPath + "/ProyectoIEI/src/fuentedatos/fuente_EUS_small.json";
         String pathIB = projectPath + "/ProyectoIEI/src/fuentedatos/fuente_IB_small.json";
+        String pathCSV = projectPath + "/ProyectoIEI/src/fuentedatos/directorio-de-bibliotecas-valencianas_2020.csv";
 
         CoordenadasGPS.getInstance();
         System.out.println();
 
+        Wrapper_CV wrapperCV = new Wrapper_CV(pathCSV);
+        wrapperCV.getJSON("");
+        System.exit(0);
         ExtractorCV extractorCV = new ExtractorCV(Lector.leerFicheroDeTexto(pathCV));
         ExtractorEUS extractorEUS = new ExtractorEUS(Lector.leerFicheroDeTexto(pathEUS));
         ExtractorIB extractorIB = new ExtractorIB(Lector.leerFicheroDeTexto(pathIB));
-
         //Extrae los datos de las fuentes
         System.out.println("Extrayendo Comunidad Valenciana");
         CentroSanitario[] hospitalesCV = extractorCV.convertir();
