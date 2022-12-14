@@ -12,7 +12,6 @@ public class CentroSanitario {
     private int telefono;
     private String descripcion;
     private Localidad localidad;
-    private Provincia provincia;
 
     
     public int getID() {
@@ -35,7 +34,6 @@ public class CentroSanitario {
         this.telefono = telefono;
         this.descripcion = descripcion;
         this.localidad = localidad;
-        this.provincia = provincia;
     }
      
     //GETTERS 
@@ -76,10 +74,6 @@ public class CentroSanitario {
         return this.localidad;
     }
 
-    public Provincia getProvincia() {
-        return this.provincia;
-    }
-
     //SETTERS
     
     public void setNombre(String nombre) {
@@ -118,10 +112,6 @@ public class CentroSanitario {
          this.localidad = localidad;
     }
 
-    public void setProvincia(Provincia provincia) {
-         this.provincia = provincia;
-    }
-
     @Override
     public String toString(){
         return
@@ -133,8 +123,7 @@ public class CentroSanitario {
             "Latitud: " + this.latitud + "\n" +
             "Telefono: " + this.telefono + "\n" +
             "Descripcion: " + this.descripcion + "\n" +
-            "Localidad: (" + this.localidad.getNombre() + ", " + this.localidad.getCodigo() + ")\n" +
-            "Provincia: (" + this.provincia.getNombre() + ", " + this.provincia.getCodigo() +  ")";
+            "Localidad: (" + this.localidad.getNombre() + ", " + this.localidad.getCodigo() + ")\n";
     }
 
 }
