@@ -7,12 +7,12 @@ import entidades.Provincia;
 import extractores.ExtractorCV;
 import extractores.ExtractorEUS;
 import extractores.ExtractorIB;
-import extractores.Wrapper_CV;
 import scrappers.CoordenadasGPS;
 import util.CentroSanitarioManager;
 import util.Lector;
 import util.LocalidadManager;
 import util.ProvinciaManager;
+import wrappers.Wrapper_CV;
 
 public class App {
     public static void main(String[] args) throws Exception {
@@ -31,7 +31,7 @@ public class App {
         System.out.println();
 
         Wrapper_CV wrapperCV = new Wrapper_CV(pathCSV);
-        wrapperCV.getJSON("");
+        wrapperCV.getJSON(projectPath + "/ProyectoIEI/src/fuentedatos/directorio-de-bibliotecas-valencianas_2020.json");
         System.exit(0);
         ExtractorCV extractorCV = new ExtractorCV(Lector.leerFicheroDeTexto(pathCV));
         ExtractorEUS extractorEUS = new ExtractorEUS(Lector.leerFicheroDeTexto(pathEUS));
