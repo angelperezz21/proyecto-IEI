@@ -32,7 +32,6 @@ public class App {
 
         Wrapper_CV wrapperCV = new Wrapper_CV(pathCSV);
         wrapperCV.getJSON(projectPath + "/ProyectoIEI/src/fuentedatos/directorio-de-bibliotecas-valencianas_2020.json");
-        System.exit(0);
         ExtractorCV extractorCV = new ExtractorCV(Lector.leerFicheroDeTexto(pathCV));
         ExtractorEUS extractorEUS = new ExtractorEUS(Lector.leerFicheroDeTexto(pathEUS));
         ExtractorIB extractorIB = new ExtractorIB(Lector.leerFicheroDeTexto(pathIB));
